@@ -25,7 +25,7 @@ def draw(canvas):
     else:
         frame.set_canvas_background(colour)
         colour = randCol()
-        size = 1
+        size = 0.01
 
     canvas.draw_circle([WIDTH /2, HEIGHT /2], size, size*2 , colour)
     
