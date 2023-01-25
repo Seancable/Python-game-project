@@ -8,28 +8,34 @@ except ImportError :
 WIDTH = 400
 HEIGHT = 300
 class Ball:
-    def __init__(self, position, velocity, radius,colour):   
+    def __init__(self, position, radius,colour):   
         self.position=position
-        self.velocity=velocity
+        self.velocity=Vector(0,0)
         self.radius=radius
         self.colour=colour
     def draw(self,canvas):
-        canvas.draw_circle(self.position, self.radius,self.radius*2, self.colour)
+        canvas.draw_circle(self.position.get_p(), self.radius,self.radius*2, self.colour)
+        self.update()
     def get_radius(self):
         return self.radius
     def set_pos(self,pos):
         self.position=list(pos)
-    #def update():
-    def set_velocity():
-        self.velocity=0
+    def update(self):
+        self.position.add(self.velocity)
+    def set_velocity(self,x,y):
+        self.velocity=Vector(x/5,y/5)
         
         
 
 class Mouse:
     def __init__(self):
         self.position=None
-    def click_pos(self,pos):
-        self.position=pos
+    def click_pos(self):
+        click=self.position
+        self.position=None
+        return click
+    def handler(self,handle):
+        self.position=handle
             
 class interaction:
     def __init__(self,ball,mouse):
@@ -41,29 +47,28 @@ class interaction:
         else:
             return math.sqrt(((point1[0]-point2[0])** 2) + ((point1[1] - point2[1]) ** 2))
     def interact(self,canvas):
-        #move1=Vector(self.ball.position)
-        #move2=Vector(self.mouse.position)
-        if self.mouse.position==None:
-            canvas.draw_circle(self.ball.position, self.ball.radius,self.ball.radius*2, self.ball.colour)
+        clicked=self.mouse.click_pos()
+        if clicked==None:
+            self.ball.draw(canvas)
         else:
-            if self.point(self.ball.position,self.mouse.position)<self.ball.radius*2:
-                #direction=move1.subtract(move2)
-                #self.ball.position=move1.add(direction)
-                self.ball.colour='Black'
-                canvas.draw_circle(self.ball.position, self.ball.radius,self.ball.radius*2, self.ball.colour)
+            move2=Vector(clicked[0],clicked[1])
+            if self.point(self.ball.position.get_p(),clicked)<self.ball.radius*2:
+                move2.subtract(self.ball.position)
+                self.ball.set_velocity(move2.get_p()[0],move2.get_p()[1])
+                #self.ball.colour='Black'
+                self.ball.draw(canvas)
             else:
-                self.ball.position=self.mouse.position
-                self.mouse.position=None
-                canvas.draw_circle(self.ball.position, self.ball.radius,self.ball.radius*2, self.ball.colour)
-
+                self.ball.position=Vector(clicked[0],clicked[1])
+                self.ball.set_velocity(0,0)
+                self.ball.draw(canvas)
 
 # Create a frame and assign callbacks to event handlers
-velocity=random.randrange(-5,5)
-ball = Ball((int(WIDTH/2),int(HEIGHT/2)),velocity,20,'Red')
+start=Vector(int(WIDTH/2),int(HEIGHT/2))
+ball = Ball(start,20,'Red')
 mouse=Mouse()
 interaction=interaction(ball,mouse)
 frame = simplegui.create_frame("Click", WIDTH, HEIGHT)
-frame.set_mouseclick_handler(mouse.click_pos)
+frame.set_mouseclick_handler(mouse.handler)
 frame.set_draw_handler(ball.draw)
 frame.set_draw_handler(interaction.interact)
 
