@@ -31,23 +31,23 @@ class SpriteSheet:
         new_list = []
         for num in range(0, 2):
             random_x, random_y = random.randint(0, 500), random.randint(0,500)
-            self.explosions.append([(self.cols+50, self.rows+30), (self.width/self.col, self.height/self.row), (random_x, random_y), (870,870)])
+            self.explosions.append([(self.cols, self.rows), (self.width/self.col, self.height/self.row), (random_x, random_y), (870,870)])
         
     def next_frame(self):
         for x in self.explosions:
             x[0] = (x[0][0] + (self.width/self.col)*2, x[0][1])
             #self.cols+=(self.width/self.col)*2
             #self.rows += self.height/self.row + 22
-            if x[0][0]>=self.width:
+            if x[0][0]>=self.width + 10:
                 x[0] = (150, x[0][1])
                 self.rows += self.height/self.row + 22
                 x[0] = (x[0][0], x[0][1] + (self.height/self.row + 22))
-                if self.done():
-                    x[0] = (x[0][0], 150)
+                if self.done(x):
+                    x[0] = (150, 150)
 
  
-    def done(self):
-        return self.rows >= 740
+    def done(self, x):
+        return x[0][1] >= 1000
 
 class Clock:
     def __init__(self):
@@ -75,3 +75,4 @@ frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_mouseclick_handler(my_click_handler)
 frame.start()
+
