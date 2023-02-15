@@ -16,19 +16,19 @@ class Wall:
     def draw(self, canvas):
         canvas.draw_line((0, 0),
                          (0, HEIGHT),
-                         self.border*2+1,
+                         self.border,
                          self.color)
         canvas.draw_line((WIDTH, 0),
                          (WIDTH, HEIGHT),
-                         self.border*2+1,
+                         self.border,
                          self.color)
         canvas.draw_line((0, 0),
                          (WIDTH, 0),
-                         self.border*2+1,
+                         self.border,
                          self.color)
         canvas.draw_line((0, HEIGHT),
                          (WIDTH, HEIGHT),
-                         self.border*2+1,
+                         self.border,
                          self.color)
 
     def hit(self, ball):
@@ -73,6 +73,11 @@ class Interaction:
 
     def update(self):
         if self.wall.hit(self.ball):
+            if self.ball.pos.x>=WIDTH-self.wall.border or self.ball.pos.x<=self.wall.border:
+                self.ball.pos=Vector(300,self.ball.pos.y)
+            if self.ball.pos.y>=HEIGHT-self.wall.border or self.ball.pos.y<=self.wall.border:
+                self.ball.pos=Vector(self.ball.pos.x,200)
+            
             if (self.ball.offset_t()<=self.wall.edge_l)or(self.ball.offset_f()>=self.wall.edge_f):
                 self.ball.bounce(self.wall.normalt)
             else:
@@ -89,7 +94,7 @@ WIDTH = 600
 HEIGHT = 400
 
 # Initial position and velocity of the ball
-p = Vector(500,200)
+p = Vector(600,200)
 v = Vector(1,-1)
 
 
