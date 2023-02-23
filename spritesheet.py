@@ -4,20 +4,20 @@ try:
 except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
-WIDTH=500
-HEIGHT=500
-IMAGE=simplegui.load_image('https://www.cs.rhul.ac.uk/courses/CS1830/sprites/runnerSheet.png')
+WIDTH= 500
+HEIGHT= 500
+IMAGE=simplegui.load_image('http://www.inkfood.com/wordprez/wp-content/uploads/SpriteSheet.png')
 
 
-class SpriteSheet:
+class Spritesheet:
     def __init__(self):
-        self.row=5
-        self.col=6
+        self.row=
+        self.col=3
         self.width=IMAGE.get_width()
-        self.height=IMAGE.get_height()
+        self.height=IMAGE.get_height() 
         self.rows=(self.height/self.row)/2
         self.cols=(self.width/self.row)/2
-        
+
     def draw(self,canvas):
         canvas.draw_image(IMAGE, (self.cols, self.rows), (self.width/self.col, self.height/self.row), (250, 250), (500,500))
     def next_frame(self):
@@ -38,9 +38,9 @@ class Clock:
             return True
         else:
             return False
-            
-                
-sheet=SpriteSheet()
+
+
+sheet=Spritesheet()
 clock=Clock()
 def draw(canvas):
     sheet.draw(canvas)
