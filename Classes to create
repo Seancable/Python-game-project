@@ -1,7 +1,7 @@
 not created:
 character- health and stamina bar, move, attack, records the lives of the player -> Sean/Alex
 enemy- multiple enemies -> Palny
-spritesheet- enter the requirements to get the right sprites to move
+spritesheet- enter the requirements to get the right sprites to move ***
 obstacle- walls and floors which will prevent the charcter to move to the other side of them
 power up - increase health and stamina
 menu- allows user to pause and quit -> Will
