@@ -75,8 +75,8 @@ class Keyboard:
             self.right = True
         if key == simplegui.KEY_MAP['left']:
             self.left = True
-        if key == simplegui.KEY_MAP['space']:
-            self.up = True
+        #if key == simplegui.KEY_MAP['space']:
+         #   self.up = True
         if key == simplegui.KEY_MAP['F']:
             self.fire =  True
             
@@ -87,7 +87,7 @@ class Keyboard:
         if key == simplegui.KEY_MAP['left']:
             self.left = False
         if key == simplegui.KEY_MAP['space']:
-            self.up = False
+            self.up = True
         if key == simplegui.KEY_MAP['F']:
             self.fire = True
             
@@ -103,11 +103,11 @@ class Interaction:
             self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
             self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
 
-        elif self.keyboard.left:
+        if self.keyboard.left:
             self.sheet.vel.add(Vector(-1,0))
             self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
             self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
-        elif self.keyboard.up:
+        if self.keyboard.up:
             if self.sheet.on_ground()==True:
                 self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
                 if self.sheet.cols>=self.sheet.width:
@@ -115,11 +115,14 @@ class Interaction:
                 self.sheet.vel.add(Vector(0,-10))
                 self.sheet.rows=(self.sheet.height/self.sheet.row/2)*7
                 self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
-        else:
+            else:
+                self.keyboard.up = False
+
+        if not (self.keyboard.right or self.keyboard.left or self.keyboard.up):
             self.sheet.rows=(self.sheet.height/self.sheet.row)/2
             self.sheet.width=IMAGE.get_width()
                                
-sheet=Character(Vector(WIDTH/2,HEIGHT-100))
+sheet=Character(Vector(WIDTH/2,HEIGHT-100)) 
 clock=Clock()
 kbd=Keyboard()
 inter=Interaction(sheet,kbd)
