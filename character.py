@@ -18,7 +18,7 @@ class Character:
         self.width=IMAGE.get_width()
         self.height=IMAGE.get_height()
         self.rows=(self.height/self.row)/2
-        self.cols=(self.width/self.row)/2
+        self.cols=(self.width/self.col)/2
         self.health=10
         self.length=(WIDTH/20)*self.health
         
@@ -52,7 +52,23 @@ class Character:
             return True
         else:
             return False
-                
+class Bullet:
+    def __init__(self,sheet):
+        self.sheet=sheet
+        self.pos=Vector(0,0)
+        self.vel=Vector(10,0)
+        self.colour='Yellow'
+        self.border=1
+        self.radius=5
+    def draw(self,canvas):
+        canvas.draw_circle(self.pos.get_p(),self.radius,self.border,self.colour,self.colour)
+    def update(self):
+        self.pos.add(self.vel)
+    def is_fired(self):
+        if self.pos==Vector(0,0):
+            return True
+        else:
+            return False
 class Clock:
     def __init__(self):
         self.time=0
@@ -75,8 +91,8 @@ class Keyboard:
             self.right = True
         if key == simplegui.KEY_MAP['left']:
             self.left = True
-        #if key == simplegui.KEY_MAP['space']:
-         #   self.up = True
+        if key == simplegui.KEY_MAP['space']:
+            self.up = True
         if key == simplegui.KEY_MAP['F']:
             self.fire =  True
             
@@ -87,9 +103,9 @@ class Keyboard:
         if key == simplegui.KEY_MAP['left']:
             self.left = False
         if key == simplegui.KEY_MAP['space']:
-            self.up = True
+            self.up = False
         if key == simplegui.KEY_MAP['F']:
-            self.fire = True
+            self.fire = False
             
 
 class Interaction:
@@ -112,7 +128,7 @@ class Interaction:
                 self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
                 if self.sheet.cols>=self.sheet.width:
                     self.sheet.cols=(IMAGE.get_width()/self.sheet.col)/2
-                self.sheet.vel.add(Vector(0,-10))
+                self.sheet.vel.add(Vector(0,-20))
                 self.sheet.rows=(self.sheet.height/self.sheet.row/2)*7
                 self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
             else:
@@ -121,18 +137,37 @@ class Interaction:
         if not (self.keyboard.right or self.keyboard.left or self.keyboard.up):
             self.sheet.rows=(self.sheet.height/self.sheet.row)/2
             self.sheet.width=IMAGE.get_width()
+            
                                
 sheet=Character(Vector(WIDTH/2,HEIGHT-100)) 
 clock=Clock()
 kbd=Keyboard()
 inter=Interaction(sheet,kbd)
+gun=False
+bullet=Bullet(sheet)
+btime=0
 def draw(canvas):
+    global gun,btime
     sheet.draw(canvas)
     clock.tick()
     inter.update()
     sheet.update()
+    bullet.draw(canvas)
+    btime+=1
     if clock.transistion(10)==True:
         sheet.next_frame()
+    if kbd.fire and bullet.is_fired():
+        bullet.pos=Vector(sheet.pos.get_p()[0],sheet.pos.get_p()[1])
+        bullet.draw(canvas)
+        gun=True
+        btime=0
+    if gun==True:
+        bullet.update()
+        if btime==50:
+            gun=False
+            bullet.pos=Vector(0,0)
+        
+        
 frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
