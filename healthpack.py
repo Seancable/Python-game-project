@@ -12,12 +12,15 @@ class HealthPack:
     def __init__(self):
         self.height=IMAGE.get_height()
         self.width=IMAGE.get_width()
-        self.pos=Vector(WIDTH/2,HEIGHT/2)
+        self.pos=Vector(WIDTH/4,HEIGHT-100)
+        self.used=False
 
     def draw(self,canvas):
-        canvas.draw_image(IMAGE, (self.width/2,self.height/2),(self.width,self.height),self.pos.get_p(),(100,100))
-                          
+        if self.used==False:
+            canvas.draw_image(IMAGE, (self.width/2,self.height/2),(self.width,self.height),self.pos.get_p(),(50,50))
+'''                          
 hp=HealthPack()     
 frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
 frame.set_draw_handler(hp.draw)
 frame.start()
+'''
