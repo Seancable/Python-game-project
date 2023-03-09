@@ -29,7 +29,7 @@ class EnemyT1:
                 self.rowmid = (self.height/self.row)*1.5
 
     def hit(self, bullet, character):
-        if bullet.pos.x >= self.pos.x and self.pos.x >= character.pos.x and bullet.pos.y >= 370:
+        if bullet.pos.x >= self.pos.x and self.pos.x >= character.pos.x and self.pos.y - 50 <= bullet.pos.y < self.pos.y + 50:
             if self.health == 1:
                 self.health -= 1
                 self.life = False
