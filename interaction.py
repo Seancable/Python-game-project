@@ -3,6 +3,7 @@ from character import *
 from healthpack import HealthPack
 from keyboard import Keyboard
 from bullet import Bullet
+from obstacles import Obstacle
 try:
     import simplegui
 except ImportError:
@@ -20,30 +21,20 @@ class Clock:
             return False
 
 class Interaction:
-    def __init__(self, sheet, keyboard,hp):
+    def __init__(self, sheet, keyboard,hp, obstacle):
         self.sheet = sheet
         self.keyboard = keyboard
         self.hp=hp
+        self.obstacle = obstacle
     def update(self):
         if self.keyboard.right:
-            self.sheet.vel.add(Vector(1, 0))
-            self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
-            self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
+            self.keyRight()
 
         if self.keyboard.left:
-            self.sheet.vel.add(Vector(-1,0))
-            self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
-            self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
+            self.keyLeft()
+            
         if self.keyboard.up:
-            if self.sheet.on_ground()==True:
-                self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
-                if self.sheet.cols>=self.sheet.width:
-                    self.sheet.cols=(IMAGE.get_width()/self.sheet.col)/2
-                self.sheet.vel.add(Vector(0,-40))
-                self.sheet.rows=(self.sheet.height/self.sheet.row/2)*7
-                self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
-            else:
-                self.keyboard.up = False
+            self.keyUp()
 
         if not (self.keyboard.right or self.keyboard.left or self.keyboard.up):
             self.sheet.rows=(self.sheet.height/self.sheet.row)/2
@@ -53,12 +44,38 @@ class Interaction:
                 self.sheet.health+=2.5
                 self.hp.used=True
                 print(self.sheet.health)
+        print(self.sheet.pos.get_p(), self.obstacle.getStart())
+        
+    def keyRight(self):
+        self.sheet.vel.add(Vector(1, 0))
+        self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
+        self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
+
+    def keyLeft(self):
+        self.sheet.vel.add(Vector(-1,0))
+        self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
+        self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
+        
+    def keyUp(self):
+        if self.sheet.on_ground()==True:
+            self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
+        if self.sheet.cols>=self.sheet.width:
+            self.sheet.cols=(IMAGE.get_width()/self.sheet.col)/2
+            self.sheet.vel.add(Vector(0,-40))
+            self.sheet.rows=(self.sheet.height/self.sheet.row/2)*7
+            self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
+        else:
+            self.keyboard.up = False
+
+    def keyDown(self):
+        pass
             
 sheet=Character(Vector(WIDTH/2,HEIGHT-100)) 
 clock=Clock()
 kbd=Keyboard()
-hp=HealthPack()  
-inter=Interaction(sheet,kbd,hp)
+hp=HealthPack()
+obs = Obstacle(100, 350, 400, 350, 20, "Orange")
+inter=Interaction(sheet,kbd,hp, obs)
 gun=False
 bullet=Bullet(sheet)
 btime=0     
@@ -70,6 +87,7 @@ def draw(canvas):
     sheet.update()
     bullet.draw(canvas)
     hp.draw(canvas)
+    obs.draw(canvas)
     btime+=1
     if clock.transistion(10)==True:
         sheet.next_frame()
@@ -90,4 +108,3 @@ frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)
 frame.start()
-
