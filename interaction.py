@@ -4,10 +4,18 @@ from healthpack import HealthPack
 from keyboard import Keyboard
 from bullet import Bullet
 from obstacles import Obstacle
+from enemy import EnemyT1
+import random
 try:
     import simplegui
 except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+
+
+enemy1_a = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/b28a06ac5850e6556ec12c44f65b3e14.png')
+enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/55942801df7a044914b713a281c53c7d.png')
+enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
+
     
 class Clock:
     def __init__(self):
@@ -69,15 +77,18 @@ class Interaction:
 
     def keyDown(self):
         pass
-            
-sheet=Character(Vector(WIDTH/2,HEIGHT-100)) 
+
+obs = Obstacle(100, 350, 400, 350, 20, "Orange")      
+sheet=Character(Vector(WIDTH/2,HEIGHT-100), obs) 
 clock=Clock()
 kbd=Keyboard()
 hp=HealthPack()
-obs = Obstacle(100, 350, 400, 350, 20, "Orange")
 inter=Interaction(sheet,kbd,hp, obs)
 gun=False
 bullet=Bullet(sheet)
+enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
+i = random.randint(0,2)
+enemyt1=EnemyT1(enemyt1list[i], (Vector(450, 400)))
 btime=0     
 def draw(canvas):
     global gun,btime
@@ -85,6 +96,7 @@ def draw(canvas):
     clock.tick()
     inter.update()
     sheet.update()
+    enemyt1.draw(canvas)
     bullet.draw(canvas)
     hp.draw(canvas)
     obs.draw(canvas)
