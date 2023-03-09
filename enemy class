@@ -1,0 +1,51 @@
+enemy1_a = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/b28a06ac5850e6556ec12c44f65b3e14.png')
+enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/55942801df7a044914b713a281c53c7d.png')
+enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
+
+class EnemyT1:
+    def __init__(self, image, pos):
+        self.pos = pos
+        self.image = image
+        self.row = 4
+        self.col = 4
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.rowmid = (self.height/self.row)*1.5
+        self.colmid = (self.width/self.row)/2
+        self.health = 3
+        self.edge = self.pos.get_p()
+        self.life = True
+        
+    def draw(self,canvas):
+        self.pos.add(Vector(-1, 0))
+        canvas.draw_image(self.image, (self.colmid, self.rowmid), (self.width/self.col, self.height/self.row), self.pos.get_p(), (100,100))
+
+    def next_frame(self):
+        self.rowmid = (self.height/self.row)*1.5
+        self.colmid += self.width/self.col
+        if self.colmid >= self.width:
+            self.colmid = (self.width/self.col)/2
+            if self.rowmid >= self.height:
+                self.rowmid = (self.height/self.row)*1.5
+
+    def hit(self, bullet, character):
+        if bullet.pos.x >= self.pos.x and self.pos.x >= character.pos.x and bullet.pos.y >= 370:
+            if self.health == 1:
+                self.health -= 1
+                self.life = False
+                self.pos = Vector(1000,1000)
+            self.health -= 1
+            return True
+            
+enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
+i = random.randint(0,2)
+enemyt1=EnemyT1(enemyt1list[i], (Vector(450, 400)))   
+
+def draw(canvas): #EDITS REQUIRED IN METHOD
+    if enemyt1.health > 0:
+        enemyt1.draw(canvas)
+    if gun==True:
+        bullet.update()
+        if (bullet.pos.x > WIDTH) or (enemyt1.hit(bullet, sheet)) == True:
+            gun=False
+            bullet.pos=Vector(0,0)
