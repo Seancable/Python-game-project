@@ -37,6 +37,17 @@ class EnemyT1:
             self.health -= 1
             return True
             
+    def obstacle(self, obstacle):
+        if self.pos.y <= obstacle.height and obstacle.x <= self.pos.x <= obstacle.length:
+            if self.image == enemy1_a:
+                self.pos = Vector(self.pos.x, obstacle.height - 45)
+            if self.image == enemy1_b:
+                self.pos = Vector(self.pos.x, obstacle.height - 45)
+            if self.image == enemy1_c:
+                self.pos = Vector(self.pos.x, obstacle.height - 35)
+        else:
+            self.pos = Vector(self.pos.x, 400)
+            
 enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
 i = random.randint(0,2)
 enemyt1=EnemyT1(enemyt1list[i], (Vector(450, 400)))   
