@@ -44,6 +44,7 @@ class Interaction:
         if self.keyboard.up:
             self.keyUp()
 
+
         if not (self.keyboard.right or self.keyboard.left or self.keyboard.up):
             self.sheet.rows=(self.sheet.height/self.sheet.row)/2
             self.sheet.width=IMAGE.get_width()
@@ -52,7 +53,8 @@ class Interaction:
                 self.sheet.health+=2.5
                 self.hp.used=True
                 print(self.sheet.health)
-        print(self.sheet.pos.get_p(), self.obstacle.getStart())
+        #print(self.sheet.pos.get_p(), self.obstacle.getStart())
+
         
     def keyRight(self):
         self.sheet.vel.add(Vector(1, 0))
@@ -65,20 +67,25 @@ class Interaction:
         self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
         
     def keyUp(self):
-        if self.sheet.on_ground()==True:
+        if self.sheet.on_ground():
             self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
         if self.sheet.cols>=self.sheet.width:
             self.sheet.cols=(IMAGE.get_width()/self.sheet.col)/2
             self.sheet.vel.add(Vector(0,-40))
             self.sheet.rows=(self.sheet.height/self.sheet.row/2)*7
-            self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
         else:
             self.keyboard.up = False
 
     def keyDown(self):
         pass
-
-obs = Obstacle(100, 350, 400, 350, 20, "Orange")      
+y1 = 350
+y2 = 250
+y3 = 150
+y4 = 50
+obs = [Obstacle(100, y1, 400, y1, 20, "Orange"),
+       Obstacle(200, y2, 550, y2, 20, "Orange"),
+       Obstacle(50, y3, 150, y3, 20, "Orange"),
+       Obstacle(280, y4, 55, y4, 20, "red")]      
 sheet=Character(Vector(WIDTH/2,HEIGHT-100), obs) 
 clock=Clock()
 kbd=Keyboard()
@@ -99,7 +106,8 @@ def draw(canvas):
     enemyt1.draw(canvas)
     bullet.draw(canvas)
     hp.draw(canvas)
-    obs.draw(canvas)
+    for obstacle in obs:
+        obstacle.draw(canvas)
     btime+=1
     if clock.transistion(10)==True:
         sheet.next_frame()
