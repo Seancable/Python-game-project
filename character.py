@@ -47,7 +47,11 @@ class Character:
         if self.pos.get_p()[0]>WIDTH:
             self.pos.subtract(Vector(WIDTH,0))
         if self.pos.get_p()[1]<HEIGHT-100:
-            if not self.obstacle.collisions(self): #only makes character move downwards if not colliding with an obstacle
+            flip = False
+            for obstacles in self.obstacle:
+                if obstacles.collisions(self): #only makes character move downwards if not colliding with an obstacle
+                    flip = True
+            if not flip:
                 self.pos.add(Vector(0,5))
             val=int(self.pos.get_p()[1])
             val=float(val)
@@ -59,7 +63,7 @@ class Character:
         #allows character to jump when on the defined ground
         if round(self.pos.get_p()[1],-1)==HEIGHT-100:
             return True
-        elif self.obstacle.collisions(self):
-            return True
-        else:
-            return False
+        for obstacles in self.obstacle:
+            if obstacles.collisions(self):
+                return True
+        return False
