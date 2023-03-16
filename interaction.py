@@ -15,7 +15,20 @@ except ImportError:
 enemy1_a = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/b28a06ac5850e6556ec12c44f65b3e14.png')
 enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/55942801df7a044914b713a281c53c7d.png')
 enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
+bck = simplegui.load_image('https://raw.githubusercontent.com/Seancable/Python-game-project/main/Level1_01.png')
 
+class Background:
+    def __init__(self, img, width, height):
+        self.image = img
+        self.width = width
+        self.height = height
+        self.center = (1152/2, 648/2)
+        self.centerDest = (width/2, height/2)
+        self.widthHeight = 1152, 648
+        self.dest = width, height
+
+    def draw(self, canvas):
+        canvas.draw_image(self.image, self.center, self.widthHeight, self.centerDest, self.dest)
     
 class Clock:
     def __init__(self):
@@ -84,9 +97,10 @@ y3 = 150
 y4 = 50
 obs = [Obstacle(100, y1, 400, y1, 20, "Orange"),
        Obstacle(200, y2, 550, y2, 20, "Orange"),
-       Obstacle(50, y3, 150, y3, 20, "Orange"),
-       Obstacle(280, y4, 55, y4, 20, "red")]      
-sheet=Character(Vector(WIDTH/2,HEIGHT-100), obs) 
+       Obstacle(50, y3, 300, y3, 20, "Orange"),
+       Obstacle(280, y4, 55, y4, 20, "Orange")]      
+sheet=Character(Vector(WIDTH/2,HEIGHT-100), obs)
+background = Background(bck, WIDTH, HEIGHT)
 clock=Clock()
 kbd=Keyboard()
 hp=HealthPack()
@@ -99,10 +113,11 @@ enemyt1=EnemyT1(enemyt1list[i], (Vector(450, 400)))
 btime=0     
 def draw(canvas):
     global gun,btime
-    sheet.draw(canvas)
     clock.tick()
     inter.update()
     sheet.update()
+    background.draw(canvas)
+    sheet.draw(canvas)
     enemyt1.draw(canvas)
     bullet.draw(canvas)
     hp.draw(canvas)
@@ -128,3 +143,4 @@ frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)
 frame.start()
+
