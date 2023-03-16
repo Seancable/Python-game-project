@@ -60,7 +60,7 @@ class Character:
                 self.pos.subtract(Vector(0,self.pos.get_p()[1]))
                 self.pos.add(Vector(0,val))
     def hit(self):
-        self.health-=1
+        self.health-=2.5
     def on_ground(self):
         #allows character to jump when on the defined ground
         if round(self.pos.get_p()[1],-1)==HEIGHT-100:
