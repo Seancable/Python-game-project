@@ -1,6 +1,13 @@
-enemy1_a = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/b28a06ac5850e6556ec12c44f65b3e14.png')
-enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/55942801df7a044914b713a281c53c7d.png')
-enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
+from vector import Vector
+import random
+try:
+    import simplegui
+except ImportError:
+    import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+    
+#enemy1_a = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/b28a06ac5850e6556ec12c44f65b3e14.png')
+#enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/55942801df7a044914b713a281c53c7d.png')
+#enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
 
 class EnemyT1:
     def __init__(self, image, pos):
@@ -8,6 +15,7 @@ class EnemyT1:
         self.image = image
         self.row = 4
         self.col = 4
+        self.left=True
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.rowmid = (self.height/self.row)*1.5
@@ -17,9 +25,13 @@ class EnemyT1:
         self.life = True
         
     def draw(self,canvas):
-        self.pos.add(Vector(-1, 0))
         canvas.draw_image(self.image, (self.colmid, self.rowmid), (self.width/self.col, self.height/self.row), self.pos.get_p(), (100,100))
 
+    def update(self):
+        if self.left==True:
+            self.pos.add(Vector(-1, 0))
+        else:
+            self.pos.add(Vector(1, 0))
     def next_frame(self):
         self.rowmid = (self.height/self.row)*1.5
         self.colmid += self.width/self.col
@@ -28,35 +40,13 @@ class EnemyT1:
             if self.rowmid >= self.height:
                 self.rowmid = (self.height/self.row)*1.5
 
-    def hit(self, bullet, character):
-        if bullet.pos.x >= self.pos.x and self.pos.x >= character.pos.x and self.pos.y - 50 <= bullet.pos.y < self.pos.y + 50:
+    def hit(self, bullet):
+        if self.edge[0]+50<=bullet.pos.get_p()[0] or self.edge[0]-50>=bullet.pos.get_p()[0] and self.edge[1]+50<=bullet.pos.get_p()[1] or self.edge[1]-50>=bullet.pos.get_p()[1]:
             if self.health == 1:
                 self.health -= 1
                 self.life = False
-                self.pos = Vector(1000,1000)
+                #self.pos = Vector(1000,1000)
             self.health -= 1
             return True
             
-    def obstacle(self, obstacle):
-        if self.pos.y <= obstacle.height and obstacle.x <= self.pos.x <= obstacle.length:
-            if self.image == enemy1_a:
-                self.pos = Vector(self.pos.x, obstacle.height - 45)
-            if self.image == enemy1_b:
-                self.pos = Vector(self.pos.x, obstacle.height - 45)
-            if self.image == enemy1_c:
-                self.pos = Vector(self.pos.x, obstacle.height - 35)
-        else:
-            self.pos = Vector(self.pos.x, 400)
-            
-enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
-i = random.randint(0,2)
-enemyt1=EnemyT1(enemyt1list[i], (Vector(450, 400)))   
-
-def draw(canvas): #EDITS REQUIRED IN METHOD
-    if enemyt1.health > 0:
-        enemyt1.draw(canvas)
-    if gun==True:
-        bullet.update()
-        if (bullet.pos.x > WIDTH) or (enemyt1.hit(bullet, sheet)) == True:
-            gun=False
-            bullet.pos=Vector(0,0)
+ 
