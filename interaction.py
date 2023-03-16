@@ -42,11 +42,13 @@ class Clock:
             return False
 
 class Interaction:
-    def __init__(self, sheet, keyboard,hp, obstacle):
+    def __init__(self, sheet, keyboard,hp, obstacle,enemy,bullet):
         self.sheet = sheet
         self.keyboard = keyboard
         self.hp=hp
         self.obstacle = obstacle
+        self.enemy=enemy
+        self.bullet=bullet
     def update(self):
         if self.keyboard.right:
             self.keyRight()
@@ -65,8 +67,14 @@ class Interaction:
             if self.hp.used==False and self.sheet.health!=10:
                 self.sheet.health+=2.5
                 self.hp.used=True
-                print(self.sheet.health)
         #print(self.sheet.pos.get_p(), self.obstacle.getStart())
+        if self.enemy.pos.get_p()[0]+50<=self.sheet.pos.get_p()[0] or self.enemy.pos.get_p()[0]-50>=self.sheet.pos.get_p()[0] and self.enemy.pos.get_p()[1]+50<=self.sheet.pos.get_p()[1] or self.enemy.pos.get_p()[1]-50>=self.sheet.pos.get_p()[1]:
+            if self.inv==False:
+                self.sheet.hit()
+                self.inv=True
+        else:
+            self.inv=False
+            
 
         
     def keyRight(self):
@@ -104,13 +112,13 @@ background = Background(bck, WIDTH, HEIGHT)
 clock=Clock()
 kbd=Keyboard()
 hp=HealthPack()
-inter=Interaction(sheet,kbd,hp, obs)
 gun=False
 bullet=Bullet(sheet)
 enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
 i = random.randint(0,2)
 enemyt1=EnemyT1(enemyt1list[i], (Vector(450, 400)))
-btime=0     
+btime=0
+inter=Interaction(sheet,kbd,hp, obs,enemyt1,bullet)
 def draw(canvas):
     global gun,btime
     clock.tick()
@@ -118,7 +126,9 @@ def draw(canvas):
     sheet.update()
     background.draw(canvas)
     sheet.draw(canvas)
-    enemyt1.draw(canvas)
+    if enemyt1.health > 0:
+        enemyt1.draw(canvas)
+        enemyt1.update()
     bullet.draw(canvas)
     hp.draw(canvas)
     for obstacle in obs:
@@ -126,6 +136,11 @@ def draw(canvas):
     btime+=1
     if clock.transistion(10)==True:
         sheet.next_frame()
+    if clock.transistion(50)==True:
+        if enemyt1.left==True:
+            enemyt1.left=False
+        else:
+            enemyt1.left=True
     if kbd.fire and bullet.is_fired():
         bullet.pos=Vector(sheet.pos.get_p()[0],sheet.pos.get_p()[1])
         bullet.draw(canvas)
@@ -133,6 +148,9 @@ def draw(canvas):
         btime=0
     if gun==True:
         bullet.update()
+        if enemyt1.hit(bullet) == True:
+            gun=False
+            bullet.pos=Vector(0,0)
         if btime==50:
             gun=False
             bullet.pos=Vector(0,0)
@@ -143,4 +161,3 @@ frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)
 frame.start()
-
