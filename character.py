@@ -22,10 +22,11 @@ class Character:
         self.health=10
         self.length=(WIDTH/20)*self.health
         self.obstacle = obs
+        self.inv=False
         
     def draw(self,canvas):
         canvas.draw_image(IMAGE, (self.cols, self.rows), (IMAGE.get_width()/self.col, IMAGE.get_height()/self.row), self.pos.get_p(), (100,100))
-        
+        canvas.draw_line((0,0),(self.length,0),20,'Red')
     def next_frame(self):
         self.cols+=IMAGE.get_width()/self.col
         if self.cols>=self.width:
@@ -58,7 +59,8 @@ class Character:
             if val==HEIGHT-100:
                 self.pos.subtract(Vector(0,self.pos.get_p()[1]))
                 self.pos.add(Vector(0,val))
-
+    def hit(self):
+        self.health-=1
     def on_ground(self):
         #allows character to jump when on the defined ground
         if round(self.pos.get_p()[1],-1)==HEIGHT-100:
@@ -67,3 +69,7 @@ class Character:
             if obstacles.collisions(self):
                 return True
         return False
+
+
+
+
