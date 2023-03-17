@@ -99,6 +99,8 @@ class Interaction:
 
     def keyDown(self):
         pass
+    
+'''
 y1 = 350
 y2 = 250
 y3 = 150
@@ -160,4 +162,5 @@ frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)
-frame.start()
+frame.start()'''
+
