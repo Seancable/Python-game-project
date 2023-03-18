@@ -68,24 +68,27 @@ class Interaction:
                 self.sheet.health+=2.5
                 self.hp.used=True
         #print(self.sheet.pos.get_p(), self.obstacle.getStart())
-        if self.enemy.pos.get_p()[0]+50<=self.sheet.pos.get_p()[0] or self.enemy.pos.get_p()[0]-50>=self.sheet.pos.get_p()[0] and self.enemy.pos.get_p()[1]+50<=self.sheet.pos.get_p()[1] or self.enemy.pos.get_p()[1]-50>=self.sheet.pos.get_p()[1]:
-            if self.inv==False:
+        # this tracks if the player hits the enemy and if they are dead
+        #or the player is invincible
+        if (self.enemy.pos.get_p()[0]+50<=self.sheet.pos.get_p()[0] and self.sheet.pos.get_p()[0]<= self.enemy.pos.get_p()[0]-50) or (self.enemy.pos.get_p()[1]+50<=self.sheet.pos.get_p()[1]and self.sheet.pos.get_p()[1] <=self.enemy.pos.get_p()[1]-50):
+            print(self.enemy.pos.get_p())
+            print(self.sheet.pos.get_p())
+            if self.sheet.inv==False and self.enemy.life==True:
                 self.sheet.hit()
-                self.inv=True
-        else:
-            self.inv=False
-            
-
+                print(self.enemy.pos.get_p())
+                self.sheet.inv=True
         
     def keyRight(self):
         self.sheet.vel.add(Vector(1, 0))
         self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
         self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
+        self.bullet.direct=True
 
     def keyLeft(self):
         self.sheet.vel.add(Vector(-1,0))
         self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
         self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
+        self.bullet.direct=False
         
     def keyUp(self):
         if self.sheet.on_ground():
@@ -99,8 +102,6 @@ class Interaction:
 
     def keyDown(self):
         pass
-    
-'''
 y1 = 350
 y2 = 250
 y3 = 150
@@ -108,7 +109,7 @@ y4 = 50
 obs = [Obstacle(100, y1, 400, y1, 20, "Orange"),
        Obstacle(200, y2, 550, y2, 20, "Orange"),
        Obstacle(50, y3, 300, y3, 20, "Orange"),
-       Obstacle(280, y4, 55, y4, 20, "Orange")]      
+       Obstacle(50, y4, 180, y4, 20, "Orange")]      
 sheet=Character(Vector(WIDTH/2,HEIGHT-100), obs)
 background = Background(bck, WIDTH, HEIGHT)
 clock=Clock()
@@ -120,9 +121,10 @@ enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
 i = random.randint(0,2)
 enemyt1=EnemyT1(enemyt1list[i], (Vector(450, 400)))
 btime=0
+invtime=0
 inter=Interaction(sheet,kbd,hp, obs,enemyt1,bullet)
 def draw(canvas):
-    global gun,btime
+    global gun,btime,invtime
     clock.tick()
     inter.update()
     sheet.update()
@@ -137,12 +139,20 @@ def draw(canvas):
         obstacle.draw(canvas)
     btime+=1
     if clock.transistion(10)==True:
+        enemyt1.next_frame()
         sheet.next_frame()
-    if clock.transistion(50)==True:
+    if clock.transistion(200)==True:
         if enemyt1.left==True:
             enemyt1.left=False
         else:
             enemyt1.left=True
+    if sheet.inv==True:
+        invtime+=1
+        if invtime%50==0:
+            sheet.inv=False
+        
+# this checks to see if the bullet is fready to be fired and will allow
+#the bullets position to chnge to interact with the enviroment
     if kbd.fire and bullet.is_fired():
         bullet.pos=Vector(sheet.pos.get_p()[0],sheet.pos.get_p()[1])
         bullet.draw(canvas)
@@ -162,5 +172,4 @@ frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)
-frame.start()'''
-
+frame.start()
