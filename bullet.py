@@ -12,10 +12,14 @@ class Bullet:
         self.colour='Yellow'
         self.border=1
         self.radius=5
+        self.direct=True
     def draw(self,canvas):
         canvas.draw_circle(self.pos.get_p(),self.radius,self.border,self.colour,self.colour)
     def update(self):
-        self.pos.add(self.vel)
+        if self.direct==True:
+            self.pos.add(self.vel)
+        else:
+            self.pos.add(Vector(-10,0))
     def is_fired(self):
         if self.pos==Vector(0,0):
             return True
