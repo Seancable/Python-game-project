@@ -10,12 +10,11 @@ except ImportError:
 #enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
 
 class EnemyT1:
-    def __init__(self, image, pos):
+    def __init__(self, image, pos, x, endX):
         self.pos = pos
         self.image = image
         self.row = 4
         self.col = 4
-        self.left=True
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.rowmid = (self.height/self.row)*1.5
@@ -23,15 +22,14 @@ class EnemyT1:
         self.health = 3
         self.edge = self.pos.get_p()
         self.life = True
+        self.x = x
+        self.endX = endX
+        self.move = Vector(-1, 0)
         
     def draw(self,canvas):
+        self.pos.add(self.move)
         canvas.draw_image(self.image, (self.colmid, self.rowmid), (self.width/self.col, self.height/self.row), self.pos.get_p(), (100,100))
 
-    def update(self):
-        if self.left==True:
-            self.pos.add(Vector(-1, 0))
-        else:
-            self.pos.add(Vector(1, 0))
     def next_frame(self):
         self.rowmid = (self.height/self.row)*1.5
         self.colmid += self.width/self.col
@@ -40,13 +38,29 @@ class EnemyT1:
             if self.rowmid >= self.height:
                 self.rowmid = (self.height/self.row)*1.5
 
-    def hit(self, bullet):
-        if self.edge[0]+50<=bullet.pos.get_p()[0] or self.edge[0]-50>=bullet.pos.get_p()[0] and self.edge[1]+50<=bullet.pos.get_p()[1] or self.edge[1]-50>=bullet.pos.get_p()[1]:
+    def hit(self, bullet, character):
+        if bullet.pos.x >= self.pos.x and self.pos.x >= character.pos.x and self.pos.y - 15 <= bullet.pos.y <= self.pos.y + 15:
             if self.health == 1:
                 self.health -= 1
                 self.life = False
-                #self.pos = Vector(1000,1000)
+                self.pos = Vector(1000,1000)
             self.health -= 1
             return True
+        
+    def attack(self, character):
+        if  self.pos.x + 15 >= character.pos.x >= self.pos.x - 15  and self.pos.y + 15 >= character.pos.y >= self.pos.y - 15:
+            self.pos = (Vector(self.pos.x + 100, self.pos.y))
+        if self.pos.x < self.x:
+            self.pos.x = self.x
+            self.move = Vector(1, 0)
+        if self.pos.x > self.endX:
+            self.pos.x = self.endX
+            self.move = Vector(-1, 0)
             
- 
+    def obstacle(self):
+        if self.pos.x < self.x:
+            self.pos.x = self.x
+            self.move = Vector(1, 0)
+        if self.pos.x > self.endX:
+            self.pos.x = self.endX
+            self.move = Vector(-1, 0)
