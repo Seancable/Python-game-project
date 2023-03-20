@@ -47,7 +47,7 @@ class Interaction:
         self.keyboard = keyboard
         self.hp=hp
         self.obstacle = obstacle
-        self.enemy=enemy
+        self.enemies=enemy
         self.bullet=bullet
     def update(self):
         if self.keyboard.right:
@@ -70,13 +70,6 @@ class Interaction:
         #print(self.sheet.pos.get_p(), self.obstacle.getStart())
         # this tracks if the player hits the enemy and if they are dead
         #or the player is invincible
-        if (self.enemy.pos.get_p()[0]+50<=self.sheet.pos.get_p()[0] and self.sheet.pos.get_p()[0]<= self.enemy.pos.get_p()[0]-50) or (self.enemy.pos.get_p()[1]+50<=self.sheet.pos.get_p()[1]and self.sheet.pos.get_p()[1] <=self.enemy.pos.get_p()[1]-50):
-            print(self.enemy.pos.get_p())
-            print(self.sheet.pos.get_p())
-            if self.sheet.inv==False and self.enemy.life==True:
-                self.sheet.hit()
-                print(self.enemy.pos.get_p())
-                self.sheet.inv=True
         
     def keyRight(self):
         self.sheet.vel.add(Vector(1, 0))
@@ -121,7 +114,7 @@ enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
 enemies=[(EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, y1 - 45), 100, 400)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(550, y2 - 50), 200, 550)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(300, y3 - 50), 50, 300))]
 btime=0
 invtime=0
-inter=Interaction(sheet,kbd,hp, obs,enemyt1,bullet)
+inter=Interaction(sheet,kbd,hp, obs,enemies,bullet)
 def draw(canvas):
     global gun,btime,invtime
     clock.tick()
@@ -131,8 +124,18 @@ def draw(canvas):
     sheet.draw(canvas)
     for enemy in enemies:
         enemy.obstacle()
-        enemy.attack(sheet)
+        hit=enemy.attack(sheet)
+        # this tracks if the player hits the enemy and if they are dead
+        #or the player is invincible
+        if hit==True:
+            if sheet.inv==False:
+                sheet.hit()
         enemy.draw(canvas)
+        if clock.transistion(200)==True:
+            if enemy.left==True:
+                enemy.left=False
+            else:
+                enemy.left=True
     bullet.draw(canvas)
     hp.draw(canvas)
     for obstacle in obs:
@@ -142,11 +145,6 @@ def draw(canvas):
         for enemy in enemies:
             enemy.next_frame()
         sheet.next_frame()
-    if clock.transistion(200)==True:
-        if enemyt1.left==True:
-            enemyt1.left=False
-        else:
-            enemyt1.left=True
     if sheet.inv==True:
         invtime+=1
         if invtime%50==0:
