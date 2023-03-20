@@ -118,8 +118,7 @@ hp=HealthPack()
 gun=False
 bullet=Bullet(sheet)
 enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
-i = random.randint(0,2)
-enemyt1=EnemyT1(enemyt1list[i], (Vector(450, 400)))
+enemies=[(EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, y1 - 45), 100, 400)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(550, y2 - 50), 200, 550)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(300, y3 - 50), 50, 300))]
 btime=0
 invtime=0
 inter=Interaction(sheet,kbd,hp, obs,enemyt1,bullet)
@@ -130,16 +129,18 @@ def draw(canvas):
     sheet.update()
     background.draw(canvas)
     sheet.draw(canvas)
-    if enemyt1.health > 0:
-        enemyt1.draw(canvas)
-        enemyt1.update()
+    for enemy in enemies:
+        enemy.obstacle()
+        enemy.attack(sheet)
+        enemy.draw(canvas)
     bullet.draw(canvas)
     hp.draw(canvas)
     for obstacle in obs:
         obstacle.draw(canvas)
     btime+=1
     if clock.transistion(10)==True:
-        enemyt1.next_frame()
+        for enemy in enemies:
+            enemy.next_frame()
         sheet.next_frame()
     if clock.transistion(200)==True:
         if enemyt1.left==True:
@@ -158,15 +159,16 @@ def draw(canvas):
         bullet.draw(canvas)
         gun=True
         btime=0
+        
     if gun==True:
         bullet.update()
-        if enemyt1.hit(bullet) == True:
+        for enemy in enemies:
+            if enemy.hit(bullet, sheet) == True:
+                gun = False
+                bullet.pos = Vector(0,0)
+        if bullet.pos.x > WIDTH:
             gun=False
             bullet.pos=Vector(0,0)
-        if btime==50:
-            gun=False
-            bullet.pos=Vector(0,0)
-        
         
 frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
