@@ -75,13 +75,15 @@ class Interaction:
         self.sheet.vel.add(Vector(1, 0))
         self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
         self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
-        self.bullet.direct=True
+        if self.bullet.is_fired():
+            self.bullet.direct=True
 
     def keyLeft(self):
         self.sheet.vel.add(Vector(-1,0))
         self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
         self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
-        self.bullet.direct=False
+        if self.bullet.is_fired():
+            self.bullet.direct=False
         
     def keyUp(self):
         if self.sheet.on_ground():
@@ -164,7 +166,7 @@ def draw(canvas):
             if enemy.hit(bullet, sheet) == True:
                 gun = False
                 bullet.pos = Vector(0,0)
-        if bullet.pos.x > WIDTH:
+        if bullet.pos.x > WIDTH or bullet.pos.x<0:
             gun=False
             bullet.pos=Vector(0,0)
         
