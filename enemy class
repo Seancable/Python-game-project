@@ -9,9 +9,9 @@ except ImportError:
 #enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/55942801df7a044914b713a281c53c7d.png')
 #enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
 
-class EnemyT1:
+class EnemyT1: #enemy of type 1
     def __init__(self, image, pos, x, endX):
-        self.pos = pos
+        self.pos = pos #provided by vector 
         self.image = image
         self.row = 4
         self.col = 4
@@ -22,7 +22,7 @@ class EnemyT1:
         self.health = 3
         self.edge = self.pos.get_p()
         self.life = True
-        self.x = x
+        self.x = x #
         self.endX = endX
         self.move = Vector(-1, 0)
         
@@ -36,7 +36,7 @@ class EnemyT1:
         if self.colmid >= self.width:
             self.colmid = (self.width/self.col)/2
             if self.rowmid >= self.height:
-                self.rowmid = (self.height/self.row)*1.5
+                self.rowmid = (self.height/self.row)*1.5 #all the spritesheets only use the 2 row of the sheet
 
     def hit(self, bullet, character):
         if bullet.pos.x >= self.pos.x and self.pos.x >= character.pos.x and self.pos.y - 15 <= bullet.pos.y <= self.pos.y + 15:
@@ -58,9 +58,9 @@ class EnemyT1:
             self.move = Vector(-1, 0)
             
     def obstacle(self):
-        if self.pos.x < self.x:
+        if self.pos.x < self.x: #if enemy moves past left side of obstacle, is stays on the obstacle and changes direction
             self.pos.x = self.x
             self.move = Vector(1, 0)
-        if self.pos.x > self.endX:
+        if self.pos.x > self.endX: #if enemy moves past the right side of obstacle, it stays on the obstacle and changes direction
             self.pos.x = self.endX
             self.move = Vector(-1, 0)
