@@ -40,7 +40,7 @@ class Obstacle:
         #returning true if they do
         #used self.thickness as a boundary on either side, self.thickness/2
         #wasnt a big enough boundary
-        if self.x - 25 < character.pos.get_p()[0] - 10 < self.endX:
+        if self.x - 25 < character.pos.get_p()[0] - 10 < self.x:
             if round(character.pos.get_p()[1]) - self.thickness/1.2 < self.y < round(character.pos.get_p()[1]) + self.thickness/1.2:
                 return True
         return False
@@ -50,7 +50,8 @@ class Obstacle:
         #returning true if they do
         #used self.thickness as a boundary on either side, self.thickness/2
         #wasnt a big enough boundary
-        if self.x < character.pos.get_p()[0] - 10 < self.endX + 25:
+        if self.endX < character.pos.get_p()[0] < self.endX + 25:
+            print(10)
             if round(character.pos.get_p()[1]) - self.thickness/1.2 < self.y < round(character.pos.get_p()[1]) + self.thickness/1.2:
                 return True
         return False
