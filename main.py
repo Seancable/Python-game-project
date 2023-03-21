@@ -14,6 +14,7 @@ enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongam
 enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
 bck = simplegui.load_image('https://raw.githubusercontent.com/Seancable/Python-game-project/main/Level1_01.png')
 
+
 class Main:
     def __init__(self, obs, character, background, clock, kbd, hp, inter, gun, bullet, enemyList, enemy, btime):
         self.obs = obs
@@ -57,24 +58,25 @@ class Main:
 
 kbd=Keyboard()
 check = False
-y1 = 350
-y2 = 250
-y3 = 150
-y4 = 50
-obs = [Obstacle(100, y1, 400, y1, 20, "Orange"),
-        Obstacle(200, y2, 550, y2, 20, "Orange"),
-        Obstacle(50, y3, 300, y3, 20, "Orange"),
-        Obstacle(55, y4, 280, y4, 20, "red")]      
+y1 = 600
+y2 = 550
+y3 = 375
+y4 = 200
+obs = [Obstacle(100, 600, 400, 600, 20, "Orange",),
+        Obstacle(500, 500, 650, 500, 50, "Orange"),
+        Obstacle(300, 400, 600, 400, 20, "Orange"),
+        Obstacle(50, 375, 300, 375, 50, "Orange"),
+        Obstacle(55, 200, 280, 200, 20, "Orange")]      
 sheet=Character(Vector(WIDTH/2,HEIGHT-100), obs)
 background = Background(bck, WIDTH, HEIGHT)
 clock=Clock()
 hp=HealthPack()
-inter=Interaction(sheet,kbd,hp, obs)
 gun=False
 bullet=Bullet(sheet)
 enemyList = [enemy1_a, enemy1_b, enemy1_c]
 i = random.randint(0,2)
 enemy=EnemyT1(enemyList[i], (Vector(450, 400)))
+inter=Interaction(sheet,kbd,hp, obs, enemy, bullet)
 btime=0
 main = Main(obs, sheet, background, clock, kbd, hp, inter, gun, bullet, enemyList, enemy, btime)
 
@@ -87,7 +89,3 @@ frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)
 frame.start()
-
-
-                
-
