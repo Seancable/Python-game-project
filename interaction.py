@@ -47,8 +47,9 @@ class Interaction:
         self.keyboard = keyboard
         self.hp=hp
         self.obstacle = obstacle
-        self.enemies=enemy
+        self.enemy=enemy
         self.bullet=bullet
+        self.inv = True
     def update(self):
         if self.keyboard.right:
             self.keyRight()
@@ -68,35 +69,43 @@ class Interaction:
                 self.sheet.health+=2.5
                 self.hp.used=True
         #print(self.sheet.pos.get_p(), self.obstacle.getStart())
-        # this tracks if the player hits the enemy and if they are dead
-        #or the player is invincible
+        else:
+            self.inv=False
+            
+
         
     def keyRight(self):
-        self.sheet.vel.add(Vector(1, 0))
+        flip = False
+        for obstacles in self.obstacle:
+            if obstacles.sideCollisionsRight(self.sheet): 
+                flip = True
+                self.sheet.vel.add(Vector(-1, 0))
+        if not flip:
+            self.sheet.vel.add(Vector(1, 0))
         self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
         self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
-        if self.bullet.is_fired():
-            self.bullet.direct=True
 
     def keyLeft(self):
-        self.sheet.vel.add(Vector(-1,0))
+        flip = False
+        for obstacles in self.obstacle:
+            if obstacles.sideCollisionsLeft(self.sheet): 
+                flip = True
+                self.sheet.vel.add(Vector(1, 0))
+        if not flip:
+            self.sheet.vel.add(Vector(-1,0))
         self.sheet.rows=(self.sheet.height/self.sheet.row/2)*3
         self.sheet.width=(IMAGE.get_width()/self.sheet.col)*6
-        if self.bullet.is_fired():
-            self.bullet.direct=False
         
     def keyUp(self):
         if self.sheet.on_ground():
             self.sheet.width=(IMAGE.get_width()/self.sheet.col)*3
         if self.sheet.cols>=self.sheet.width:
             self.sheet.cols=(IMAGE.get_width()/self.sheet.col)/2
-            self.sheet.vel.add(Vector(0,-40))
             self.sheet.rows=(self.sheet.height/self.sheet.row/2)*7
+            self.sheet.vel.add(Vector(0,-40))
         else:
             self.keyboard.up = False
-
-    def keyDown(self):
-        pass
+'''           
 y1 = 350
 y2 = 250
 y3 = 150
@@ -174,4 +183,4 @@ frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)
-frame.start()
+frame.start()'''
