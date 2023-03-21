@@ -4,8 +4,8 @@ try:
 except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
-WIDTH=500
-HEIGHT=500
+WIDTH=750
+HEIGHT=750
 IMAGE=simplegui.load_image('https://opengameart.org/sites/default/files/hero_spritesheet_0.png')
 IMAGE2=simplegui.load_image('hero_spritesheet_walking.png')
 
@@ -23,10 +23,15 @@ class Character:
         self.length=(WIDTH/20)*self.health
         self.obstacle = obs
         self.inv=False
+        self.height = 500
+
+    def setHeight(self, newHeight):
+        self.height = newHeight
         
     def draw(self,canvas):
-        canvas.draw_image(IMAGE,(self.cols, self.rows), (IMAGE.get_width()/self.col, IMAGE.get_height()/self.row), self.pos.get_p(), (100,100))
+        canvas.draw_image(IMAGE, (self.cols, self.rows), (IMAGE.get_width()/self.col, IMAGE.get_height()/self.row), self.pos.get_p(), (100,100))
         canvas.draw_line((0,0),(self.length,0),20,'Red')
+        
     def next_frame(self):
         self.cols+=IMAGE.get_width()/self.col
         if self.cols>=self.width:
@@ -61,7 +66,7 @@ class Character:
                 self.pos.add(Vector(0,val))
     def hit(self):
         self.health-=2.5
-        self.inv=True
+        self.inv = True
     def on_ground(self):
         #allows character to jump when on the defined ground
         if round(self.pos.get_p()[1],-1)==HEIGHT-100:
