@@ -1,5 +1,5 @@
 import time
-from menu import Menu
+#from menu import Menu
 from character import Character
 from bullet import Bullet
 from keyboard import Keyboard
@@ -32,29 +32,62 @@ class Main:
         self.x = 0
 
     def runGame(self, canvas):
-        self.clock.tick()
-        self.inter.update()
-        self.character.update()
-        self.background.draw(canvas)
-        self.character.draw(canvas)
-        self.enemy.draw(canvas)
-        self.bullet.draw(canvas)
-        self.hp.draw(canvas)
-        for obs in self.obs:
-            obs.draw(canvas)
-        self.btime+=1
-        if self.clock.transistion(10)==True:
-            self.character.next_frame()
-        if self.kbd.fire and self.bullet.is_fired():
-            self.bullet.pos=Vector(self.character.pos.get_p()[0], self.character.pos.get_p()[1])
-            self.bullet.draw(canvas)
-            self.gun=True
-            self.btime=0
-        if self.gun==True:
-            self.bullet.update()
-            if self.btime==50:
-                self.gun=False
-                self.bullet.pos=Vector(0,0)
+        global gun,btime,invtime,enemy_counter
+        clock.tick()
+        inter.update()
+        sheet.update()
+        background.draw(canvas)
+        sheet.draw(canvas)
+        for enemy in enemies:
+            enemy.obstacle()
+            hit=enemy.attack(sheet)
+            # this tracks if the player hits the enemy and if they are dead
+            #or the player is invincible
+            if hit==True:
+                if sheet.inv==False:
+                    sheet.hit()
+            if enemy.life==False:
+                enemy_counter+=1
+                enemy.life=True
+            enemy.draw(canvas)
+            if clock.transistion(200)==True:
+                if enemy.left==True:
+                    enemy.left=False
+                else:
+                    enemy.left=True
+        bullet.draw(canvas)
+        hp.draw(canvas)
+        if enemy_counter==len(enemies):
+            print("all enemies arte dead")
+        
+        for obstacle in obs:
+            obstacle.draw(canvas)
+        btime+=1
+        if clock.transistion(10)==True:
+            for enemy in enemies:
+                enemy.next_frame()
+            sheet.next_frame()
+        if sheet.inv==True:
+            invtime+=1
+            if invtime%50==0:
+                sheet.inv=False
+        # this checks to see if the bullet is fready to be fired and will allow
+        #the bullets position to chnge to interact with the enviroment
+        if kbd.fire and bullet.is_fired():
+            bullet.pos=Vector(sheet.pos.get_p()[0],sheet.pos.get_p()[1])
+            bullet.draw(canvas)
+            gun=True
+            btime=0
+            
+        if gun==True:
+            bullet.update()
+            for enemy in enemies:
+                if enemy.hit(bullet, sheet) == True:
+                    gun = False
+                    bullet.pos = Vector(0,0)
+            if bullet.pos.x > WIDTH or bullet.pos.x<0:
+                gun=False
+                bullet.pos=Vector(0,0)
 
 def firstLevel():
     obs = [Obstacle(100, 600, 400, 600, 20, "Orange",),
@@ -67,15 +100,16 @@ def firstLevel():
 sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel())
 background = Background(bck, WIDTH, HEIGHT)
 clock=Clock()
-hp=HealthPack()
 kbd=Keyboard()
+hp=HealthPack(Vector(100,600))
 gun=False
 bullet=Bullet(sheet)
-enemyList = [enemy1_a, enemy1_b, enemy1_c]
-i = random.randint(0,2)
-enemy=EnemyT1(enemyList[i], (Vector(450, 400)))
-inter=Interaction(sheet,kbd,hp, firstLevel(), enemy, bullet)
+enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
+enemies=[(EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, y1 - 45), 100, 400)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(550, y2 - 50), 200, 550)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(300, y3 - 50), 50, 300))]
 btime=0
+invtime=0
+inter=Interaction(sheet,kbd,hp, firstlevel(),enemies,bullet)
+enemy_counter=0
 main = Main(firstLevel(), sheet, background, clock, kbd, hp, inter, gun, bullet, enemyList, enemy, btime)
 
 def draw(canvas):
