@@ -23,7 +23,5 @@ class Sound:
     def rick_song(self):
         playsound(self.rick)
 
-song=Sound()
-song.rick_song()
 
 
