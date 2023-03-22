@@ -16,7 +16,7 @@ bck = simplegui.load_image('https://raw.githubusercontent.com/Seancable/Python-g
 
 
 class Main:
-    def __init__(self, obs, character, background, clock, kbd, hp, inter, gun, bullet, enemyList, enemy, btime):
+    def __init__(self, obs, character, background, clock, kbd, hp, inter, gun, bullet, enemyList, btime):
         self.obs = obs
         self.character = character
         self.background = background
