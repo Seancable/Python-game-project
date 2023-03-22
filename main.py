@@ -27,67 +27,68 @@ class Main:
         self.gun = False
         self.bullet = bullet
         self.enemyList = enemyList
-        self.enemy = enemy
+        self.enemy_counter = 0
         self.btime = 0
+        self.invtime=0
         self.x = 0
 
     def runGame(self, canvas):
         global gun,btime,invtime,enemy_counter
-        clock.tick()
-        inter.update()
-        sheet.update()
-        background.draw(canvas)
-        sheet.draw(canvas)
-        for enemy in enemies:
+        self.clock.tick()
+        self.inter.update()
+        self.character.update()
+        self.background.draw(canvas)
+        self.character.draw(canvas)
+        for enemy in self.enemyList:
             enemy.obstacle()
             hit=enemy.attack(sheet)
             # this tracks if the player hits the enemy and if they are dead
             #or the player is invincible
             if hit==True:
-                if sheet.inv==False:
-                    sheet.hit()
+                if self.character.inv==False:
+                    self.character.hit()
             if enemy.life==False:
                 enemy_counter+=1
                 enemy.life=True
             enemy.draw(canvas)
-            if clock.transistion(200)==True:
+            if self.clock.transistion(200)==True:
                 if enemy.left==True:
                     enemy.left=False
                 else:
                     enemy.left=True
-        bullet.draw(canvas)
-        hp.draw(canvas)
-        if enemy_counter==len(enemies):
+        self.bullet.draw(canvas)
+        self.hp.draw(canvas)
+        if self.enemy_counter==len(enemies):
             print("all enemies arte dead")
         
-        for obstacle in obs:
+        for obstacle in self.obs:
             obstacle.draw(canvas)
-        btime+=1
-        if clock.transistion(10)==True:
-            for enemy in enemies:
+        self.btime+=1
+        if self.clock.transistion(10)==True:
+            for enemy in self.enemyList:
                 enemy.next_frame()
             sheet.next_frame()
-        if sheet.inv==True:
-            invtime+=1
-            if invtime%50==0:
-                sheet.inv=False
+        if self.character.inv==True:
+            self.invtime+=1
+            if self.invtime%50==0:
+                self.character.inv=False
         # this checks to see if the bullet is fready to be fired and will allow
         #the bullets position to chnge to interact with the enviroment
-        if kbd.fire and bullet.is_fired():
-            bullet.pos=Vector(sheet.pos.get_p()[0],sheet.pos.get_p()[1])
-            bullet.draw(canvas)
-            gun=True
-            btime=0
+        if self.kbd.fire and self.bullet.is_fired():
+            self.bullet.pos=Vector(self.character.pos.get_p()[0],self.character.pos.get_p()[1])
+            self.bullet.draw(canvas)
+            self.gun=True
+            self.btime=0
             
-        if gun==True:
-            bullet.update()
-            for enemy in enemies:
-                if enemy.hit(bullet, sheet) == True:
-                    gun = False
-                    bullet.pos = Vector(0,0)
-            if bullet.pos.x > WIDTH or bullet.pos.x<0:
-                gun=False
-                bullet.pos=Vector(0,0)
+        if self.gun==True:
+            self.bullet.update()
+            for enemy in self.enemyList:
+                if enemy.hit(self.bullet, self.character) == True:
+                    self.gun = False
+                    self.bullet.pos = Vector(0,0)
+            if self.bullet.pos.x > WIDTH or self.bullet.pos.x<0:
+                self.gun=False
+                self.bullet.pos=Vector(0,0)
 
 def firstLevel():
     obs = [Obstacle(100, 600, 400, 600, 20, "Orange",),
