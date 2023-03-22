@@ -83,9 +83,8 @@ main = MainGame(obs, sheet, background, clock, kbd, hp, inter, gun, bullet, enem
 def draw(canvas):
     global main
     main.runGame(canvas)
-    
+
 def playGame():
-    print("Game")
     frame.set_draw_handler(draw)
     frame.set_keydown_handler(kbd.keyDown)
     frame.set_keyup_handler(kbd.keyUp)
@@ -96,6 +95,7 @@ def start(canvas):
     choice = mn.mainmenu(canvas)
 
 def click(pos):
+    # Start Game
     print(pos)
     x = pos[0]
     y = pos[1]
@@ -115,6 +115,3 @@ frame = simplegui.create_frame('The War of The Worlds', WIDTH, HEIGHT)
 frame.set_draw_handler(start)
 frame.set_mouseclick_handler(click)
 frame.start()
-
-
-    
