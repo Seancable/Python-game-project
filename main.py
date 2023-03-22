@@ -16,7 +16,7 @@ bck = simplegui.load_image('https://raw.githubusercontent.com/Seancable/Python-g
 
 
 class Main:
-    def __init__(self, obs, character, background, clock, kbd, hp, inter, gun, bullet, enemyList, btime):
+    def __init__(self, obs, character, background, clock, kbd, hp, inter, gun, bullet, enemyList):
         self.obs = obs
         self.character = character
         self.background = background
@@ -91,7 +91,7 @@ class Main:
                 self.bullet.pos=Vector(0,0)
 
 def firstLevel():
-    obs = [Obstacle(100, 600, 400, 600, 20, "Orange",),
+    obs = [Obstacle(200, 600, 400, 600, 20, "Orange",),
         Obstacle(500, 500, 650, 500, 50, "Orange"),
         Obstacle(300, 400, 600, 400, 20, "Orange"),
         Obstacle(50, 375, 300, 375, 50, "Orange"),
@@ -102,6 +102,10 @@ sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel())
 background = Background(bck, WIDTH, HEIGHT)
 clock=Clock()
 kbd=Keyboard()
+y1 = 600
+y2 = 450
+y3 = 300
+y4 = 100
 hp=HealthPack(Vector(100,600))
 gun=False
 bullet=Bullet(sheet)
@@ -109,9 +113,9 @@ enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
 enemies=[(EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, y1 - 45), 100, 400)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(550, y2 - 50), 200, 550)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(300, y3 - 50), 50, 300))]
 btime=0
 invtime=0
-inter=Interaction(sheet,kbd,hp, firstlevel(),enemies,bullet)
+inter=Interaction(sheet,kbd,hp, firstLevel(),enemies,bullet)
 enemy_counter=0
-main = Main(firstLevel(), sheet, background, clock, kbd, hp, inter, gun, bullet, enemyList, enemy, btime)
+main = Main(firstLevel(), sheet, background, clock, kbd, hp, inter, gun, bullet, enemies)
 
 def draw(canvas):
     main.runGame(canvas)
@@ -121,6 +125,5 @@ frame.set_draw_handler(draw)
 frame.set_keydown_handler(kbd.keyDown)
 frame.set_keyup_handler(kbd.keyUp)
 frame.start()
-
 
                 
