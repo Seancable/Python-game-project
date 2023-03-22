@@ -8,6 +8,7 @@ from interaction import *
 from obstacles import Obstacle
 from healthpack import HealthPack
 from vector import Vector
+from menu import Menu
 
 enemy1_a = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/b28a06ac5850e6556ec12c44f65b3e14.png')
 enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/55942801df7a044914b713a281c53c7d.png')
@@ -39,6 +40,7 @@ class Main:
         self.character.update()
         self.background.draw(canvas)
         self.character.draw(canvas)
+
         for enemy in self.enemyList:
             enemy.obstacle()
             hit=enemy.attack(sheet)
@@ -51,18 +53,12 @@ class Main:
                 self.enemy_counter+=1
                 enemy.life=True
             enemy.draw(canvas)
-            '''
-            if self.clock.transistion(200)==True:
-                if enemy.left==True:
-                    enemy.left=False
-                else:
-                    enemy.left=True
-            '''
+            
         self.bullet.draw(canvas)
         self.hp.draw(canvas)
         if self.enemy_counter==len(self.enemyList):
-            print("all enemies arte dead")
-        
+            print("all enemies are dead")
+
         for obstacle in self.obs:
             obstacle.draw(canvas)
         self.btime+=1
@@ -81,7 +77,7 @@ class Main:
             self.bullet.draw(canvas)
             self.gun=True
             self.btime=0
-            
+
         if self.gun==True:
             self.bullet.update()
             for enemy in self.enemyList:
@@ -103,7 +99,7 @@ def firstLevel():
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 60), 55, 280),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     return obs, enemies
-    
+
 sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel()[0])
 background = Background(bck, WIDTH, HEIGHT)
 clock=Clock()
@@ -124,8 +120,33 @@ main = Main(firstLevel()[0], sheet, background, clock, kbd, hp, inter, gun, bull
 def draw(canvas):
     main.runGame(canvas)
 
+def playGame():
+    frame.set_draw_handler(draw)
+    frame.set_keydown_handler(kbd.keyDown)
+    frame.set_keyup_handler(kbd.keyUp)
+
+def start(canvas):
+    frame.set_canvas_background('Grey')
+    mn = Menu(WIDTH, HEIGHT)
+    choice = mn.mainmenu(canvas)
+
+def click(pos):
+    # Start Game
+    print(pos)
+    x = pos[0]
+    y = pos[1]
+
+    if (195 < x < 555) and (197 < y < 240):
+        print("Start Game")
+        playGame()
+    if (195 < x < 555) and (355 < y < 385):
+        print("Settings")
+        quit()
+    if (245 < x < 505) and (415 < y < 440):
+        print("Quit")
+        quit()
+
 frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
-frame.set_draw_handler(draw)
-frame.set_keydown_handler(kbd.keyDown)
-frame.set_keyup_handler(kbd.keyUp)
+frame.set_draw_handler(start)
+frame.set_mouseclick_handler(click)
 frame.start()
