@@ -96,7 +96,10 @@ def firstLevel():
         Obstacle(300, 400, 600, 400, 20, "Orange"),
         Obstacle(50, 375, 300, 375, 50, "Orange"),
         Obstacle(55, 200, 280, 200, 20, "Orange")]
-    return obs
+    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 45), 300, 600),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 45), 55, 280),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 45), 200, 400)]
+    return obs, enemies
     
 sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel())
 background = Background(bck, WIDTH, HEIGHT)
@@ -110,12 +113,11 @@ hp=HealthPack(Vector(100,600))
 gun=False
 bullet=Bullet(sheet)
 enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
-enemies=[(EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, y1 - 45), 100, 400)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(550, y2 - 50), 200, 550)), (EnemyT1(enemyt1list[random.randint(0,2)], Vector(300, y3 - 50), 50, 300))]
 btime=0
 invtime=0
 inter=Interaction(sheet,kbd,hp, firstLevel(),enemies,bullet)
 enemy_counter=0
-main = Main(firstLevel(), sheet, background, clock, kbd, hp, inter, gun, bullet, enemies)
+main = Main(firstLevel()[0], sheet, background, clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
 
 def draw(canvas):
     main.runGame(canvas)
