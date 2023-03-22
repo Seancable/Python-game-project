@@ -48,7 +48,7 @@ class Main:
                 if self.character.inv==False:
                     self.character.hit()
             if enemy.life==False:
-                enemy_counter+=1
+                self.enemy_counter+=1
                 enemy.life=True
             enemy.draw(canvas)
             '''
