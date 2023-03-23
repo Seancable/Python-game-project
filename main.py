@@ -1,5 +1,4 @@
 import time
-#from menu import Menu
 from character import Character
 from bullet import Bullet
 from keyboard import Keyboard
@@ -49,7 +48,7 @@ class Main:
             # this tracks if the player hits the enemy and if they are dead
             #or the player is invincible
             if hit==True:
-                if self.character.inv==False:
+                if self.character.inv==False: #player is no longer invincible
                     self.character.hit()
             if enemy.life==False:
                 self.enemy_counter+=1
@@ -94,7 +93,7 @@ def firstLevel():
     background = Background(bck, WIDTH, HEIGHT)
     enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
     enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 60), 300, 600),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 60), 55, 280),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 95), 400, 750),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     obs = [Obstacle(200, 600, 400, 600, 20, "Orange",),
         Obstacle(400, 450, 550, 450, 20, "Orange"),
@@ -110,32 +109,37 @@ def secondLevel():
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 60), 55, 280),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     obs = [Obstacle(400, 550, 690, 550, 20, "Orange",),
-           Obstacle(153, 395, 193, 395, 20, "Orange",),
+           Obstacle(133, 425, 250, 425, 20, "Orange",),
            Obstacle(270, 390, 320, 390, 20, "Orange",),
-           Obstacle(70, 390, 115, 390, 20, "Orange",),
            Obstacle(624, 204, 750, 204, 20, "Orange",),
-           Obstacle(250, 280, 470, 280, 20, "Orange",),
            Obstacle(400, 83, 690, 83, 20, "Orange",)]
     return obs, enemies, background
 
-clock=Clock()
-kbd=Keyboard()
-hp=HealthPack(Vector(100,600))
-gun=False
-btime=0
-invtime=0
-enemy_counter=0
-check = 2
+check = 1
 if check == 1:
+    clock=Clock()
+    kbd=Keyboard()
+    hp=HealthPack(Vector(100,600))
+    gun=False
+    btime=0
+    invtime=0
+    enemy_counter=0
     sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel()[0])
     bullet=Bullet(sheet)
     inter=Interaction(sheet,kbd,hp, firstLevel()[0],firstLevel()[1],bullet)
+    main = Main(firstLevel()[0], sheet, firstLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
 elif check == 2:
+    clock=Clock()
+    kbd=Keyboard()
+    hp=HealthPack(Vector(100,600))
+    gun=False
+    btime=0
+    invtime=0
+    enemy_counter=0
     sheet=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
     bullet=Bullet(sheet)    
     inter=Interaction(sheet,kbd,hp, secondLevel()[0],secondLevel()[1],bullet)    
-#main = Main(firstLevel()[0], sheet, firstLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
-main = Main(secondLevel()[0], sheet, secondLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
+    main = Main(secondLevel()[0], sheet, secondLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
 
 def draw(canvas):
     main.runGame(canvas)
