@@ -65,6 +65,15 @@ class Main:
             self.obs = []
             mn = Menu(WIDTH, HEIGHT)
             mn.contmenu(canvas)
+            self.enemy_counter=0
+            self.background=secondLevel()[2]
+            self.obs=secondLevel()[0]
+            self.enemyList=secondLevel()[1]
+            self.character=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
+            self.inter=Interaction(self.character,self.kbd,self.hp, secondLevel()[0],secondLevel()[1],self.bullet)
+        if self.character.health==0:
+            print("you are dead")
+            self.menu.mainmenu(canvas)
         for obstacle in self.obs:
             obstacle.draw(canvas)
         self.btime+=1
@@ -123,31 +132,32 @@ def secondLevel():
     return obs, enemies, background
 
 check = 1
-if check == 1:
-    clock=Clock()
-    kbd=Keyboard()
-    hp=HealthPack(Vector(100,600))
-    gun=False
-    btime=0
-    invtime=0
-    enemy_counter=0
-    sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel()[0])
-    bullet=Bullet(sheet)
-    inter=Interaction(sheet,kbd,hp, firstLevel()[0],firstLevel()[1],bullet)
-    main = Main(firstLevel()[0], sheet, firstLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
-elif check == 2:
-    clock=Clock()
-    kbd=Keyboard()
-    hp=HealthPack(Vector(100,600))
-    gun=False
-    btime=0
-    invtime=0
-    enemy_counter=0
-    sheet=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
-    bullet=Bullet(sheet)
-    inter=Interaction(sheet,kbd,hp, secondLevel()[0],secondLevel()[1],bullet)
-    main = Main(secondLevel()[0], sheet, secondLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
+clock=Clock()
+kbd=Keyboard()
+hp=HealthPack(Vector(100,600))
+gun=False
+btime=0
+invtime=0
+enemy_counter=0
+check = 1
+menu=Menu(WIDTH,HEIGHT)
+def getMain():
+    global check,passed
+    if check == 1:
+        sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel()[0])
+        bullet=Bullet(sheet)
+        inter=Interaction(sheet,kbd,hp, firstLevel()[0],firstLevel()[1],bullet)
+        passed=False
+        return Main(firstLevel()[0], sheet, firstLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1],menu)
 
+    elif check == 2:
+        sheet=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
+        bullet=Bullet(sheet)
+        inter=Interaction(sheet,kbd,hp, secondLevel()[0],secondLevel()[1],bullet)    
+        passed=False
+        return Main(secondLevel()[0], sheet, secondLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1],menu)
+     
+main=getMain()
 def draw(canvas):
     main.runGame(canvas)
 
