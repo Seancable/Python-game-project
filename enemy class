@@ -39,7 +39,7 @@ class EnemyT1: #enemy of type 1
                 self.rowmid = (self.height/self.row)*1.5 #all the spritesheets only use the 2 row of the sheet
 
     def hit(self, bullet, character):
-        if bullet.pos.x >= self.pos.x and self.pos.x >= character.pos.x and self.pos.y - 15 <= bullet.pos.y <= self.pos.y + 15:
+        if bullet.pos.x+30 >= self.pos.x >=bullet.pos.x-30 and self.pos.y - 30 <= bullet.pos.y <= self.pos.y + 30:
             if self.health == 1:
                 self.health -= 1
                 self.life = False
@@ -48,7 +48,7 @@ class EnemyT1: #enemy of type 1
             return True
         
     def attack(self, character):
-        if  self.pos.x + 15 >= character.pos.x >= self.pos.x - 15  and self.pos.y + 15 >= character.pos.y >= self.pos.y - 15:
+        if  self.pos.x + 30 >= character.pos.x >= self.pos.x - 30  and self.pos.y + 30 >= character.pos.y >= self.pos.y - 30:
             #self.pos = (Vector(self.pos.x + 100, self.pos.y))
             return True
         if self.pos.x < self.x:
