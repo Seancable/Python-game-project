@@ -105,9 +105,10 @@ def firstLevel():
 def secondLevel():
     background = Background(bck2, WIDTH, HEIGHT)
     enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
-    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 60), 300, 600),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 60), 55, 280),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
+    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(random.randint(400,690), 83 - 60), 400, 690),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(random.randint(0, 204), 204 - 60), 0, 204),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(690, 550 - 60), 400, 690),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(WIDTH/2, HEIGHT - 115), 0, WIDTH/2]
     obs = [Obstacle(400, 550, 690, 550, 20, "Orange",),
            Obstacle(133, 425, 340, 425, 20, "Orange",),
            Obstacle(240, 300, 340, 300, 20, "Orange",),
