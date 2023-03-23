@@ -49,7 +49,8 @@ class EnemyT1: #enemy of type 1
         
     def attack(self, character):
         if  self.pos.x + 15 >= character.pos.x >= self.pos.x - 15  and self.pos.y + 15 >= character.pos.y >= self.pos.y - 15:
-            self.pos = (Vector(self.pos.x + 100, self.pos.y))
+            #self.pos = (Vector(self.pos.x + 100, self.pos.y))
+            return True
         if self.pos.x < self.x:
             self.pos.x = self.x
             self.move = Vector(1, 0)
