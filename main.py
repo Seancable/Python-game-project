@@ -93,7 +93,7 @@ def firstLevel():
     background = Background(bck, WIDTH, HEIGHT)
     enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
     enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 60), 300, 600),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 95), 400, 750),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 95), 100, 750),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     obs = [Obstacle(200, 600, 400, 600, 20, "Orange",),
         Obstacle(400, 450, 550, 450, 20, "Orange"),
@@ -109,13 +109,13 @@ def secondLevel():
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 60), 55, 280),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     obs = [Obstacle(400, 550, 690, 550, 20, "Orange",),
-           Obstacle(133, 425, 250, 425, 20, "Orange",),
-           Obstacle(270, 390, 320, 390, 20, "Orange",),
-           Obstacle(624, 204, 750, 204, 20, "Orange",),
+           Obstacle(133, 425, 340, 425, 20, "Orange",),
+           Obstacle(240, 300, 340, 300, 20, "Orange",),
+           Obstacle(0, 204, 230, 204, 20, "Orange",),
            Obstacle(400, 83, 690, 83, 20, "Orange",)]
     return obs, enemies, background
 
-check = 1
+check = 2
 if check == 1:
     clock=Clock()
     kbd=Keyboard()
