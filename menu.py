@@ -1,5 +1,4 @@
 import random
-from menuCont import MenuCont
 
 try:
     import simplegui
