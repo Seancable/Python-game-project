@@ -14,6 +14,8 @@ enemy1_a = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongam
 enemy1_b = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/55942801df7a044914b713a281c53c7d.png')
 enemy1_c = simplegui.load_image('https://s3.us-east-2.amazonaws.com/ascensiongamedev/filehost/16eeaa1a8b6b77bb7fbbd21284a820eb.png')
 bck = simplegui.load_image('https://raw.githubusercontent.com/Seancable/Python-game-project/main/Level1_01.png')
+bck2 = simplegui.load_image('https://raw.githubusercontent.com/Seancable/Python-game-project/main/Level1_02.png')
+#bck3 = simplegui.load_image()
 
 
 class Main:
@@ -89,33 +91,51 @@ class Main:
                 self.bullet.pos=Vector(0,0)
 
 def firstLevel():
+    background = Background(bck, WIDTH, HEIGHT)
     enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
+    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 60), 300, 600),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 60), 55, 280),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     obs = [Obstacle(200, 600, 400, 600, 20, "Orange",),
         Obstacle(400, 450, 550, 450, 20, "Orange"),
         Obstacle(400, 100, 750, 100, 20, "Orange"),
         Obstacle(50, 375, 300, 375, 20, "Orange"),
         Obstacle(55, 200, 280, 200, 20, "Orange")]
+    return obs, enemies, background
+
+def secondLevel():
+    background = Background(bck2, WIDTH, HEIGHT)
+    enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
     enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 60), 300, 600),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 60), 55, 280),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
-    return obs, enemies
+    obs = [Obstacle(400, 550, 690, 550, 20, "Orange",),
+           Obstacle(153, 395, 193, 395, 20, "Orange",),
+           Obstacle(270, 390, 320, 390, 20, "Orange",),
+           Obstacle(70, 390, 115, 390, 20, "Orange",),
+           Obstacle(624, 204, 750, 204, 20, "Orange",),
+           Obstacle(250, 280, 470, 280, 20, "Orange",),
+           Obstacle(400, 83, 690, 83, 20, "Orange",)]
+    return obs, enemies, background
 
-sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel()[0])
-background = Background(bck, WIDTH, HEIGHT)
 clock=Clock()
 kbd=Keyboard()
-y1 = 600
-y2 = 450
-y3 = 300
-y4 = 100
 hp=HealthPack(Vector(100,600))
 gun=False
-bullet=Bullet(sheet)
 btime=0
 invtime=0
-inter=Interaction(sheet,kbd,hp, firstLevel()[0],firstLevel()[1],bullet)
 enemy_counter=0
-main = Main(firstLevel()[0], sheet, background, clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
+check = 2
+if check == 1:
+    sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel()[0])
+    bullet=Bullet(sheet)
+    inter=Interaction(sheet,kbd,hp, firstLevel()[0],firstLevel()[1],bullet)
+elif check == 2:
+    sheet=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
+    bullet=Bullet(sheet)    
+    inter=Interaction(sheet,kbd,hp, secondLevel()[0],secondLevel()[1],bullet)    
+#main = Main(firstLevel()[0], sheet, firstLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
+main = Main(secondLevel()[0], sheet, secondLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
 
 def draw(canvas):
     main.runGame(canvas)
