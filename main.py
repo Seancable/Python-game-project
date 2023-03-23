@@ -33,6 +33,7 @@ class Main:
         self.btime = 0
         self.invtime=0
         self.x = 0
+        self.level = 1
 
     def runGame(self, canvas):
         global gun,btime,invtime,enemy_counter
@@ -54,12 +55,16 @@ class Main:
                 self.enemy_counter+=1
                 enemy.life=True
             enemy.draw(canvas)
-            
+
         self.bullet.draw(canvas)
         self.hp.draw(canvas)
         if self.enemy_counter==len(self.enemyList):
-            print("all enemies are dead")
-
+            #print("All enemies are dead")
+            #print("Complete level " + str(self.level) + "!")
+            self.level += 1
+            self.obs = []
+            mn = Menu(WIDTH, HEIGHT)
+            mn.contmenu(canvas)
         for obstacle in self.obs:
             obstacle.draw(canvas)
         self.btime+=1
@@ -93,7 +98,7 @@ def firstLevel():
     background = Background(bck, WIDTH, HEIGHT)
     enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
     enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 60), 300, 600),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 95), 100, 750),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 95), 400, 750),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     obs = [Obstacle(200, 600, 400, 600, 20, "Orange",),
         Obstacle(400, 450, 550, 450, 20, "Orange"),
@@ -105,18 +110,17 @@ def firstLevel():
 def secondLevel():
     background = Background(bck2, WIDTH, HEIGHT)
     enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
-    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(random.randint(400,690), 83 - 52), 400, 690),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(random.randint(0,204), 204 - 60), 0, 204),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(690, 550 - 60), 400, 690),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(WIDTH/2, HEIGHT - 115), 0, WIDTH/2 - 70]
+    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 60), 300, 600),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 60), 55, 280),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     obs = [Obstacle(400, 550, 690, 550, 20, "Orange",),
-           Obstacle(133, 425, 340, 425, 20, "Orange",),
-           Obstacle(240, 300, 340, 300, 20, "Orange",),
-           Obstacle(0, 204, 230, 204, 20, "Orange",),
+           Obstacle(133, 425, 250, 425, 20, "Orange",),
+           Obstacle(270, 390, 320, 390, 20, "Orange",),
+           Obstacle(624, 204, 750, 204, 20, "Orange",),
            Obstacle(400, 83, 690, 83, 20, "Orange",)]
     return obs, enemies, background
 
-check = 2
+check = 1
 if check == 1:
     clock=Clock()
     kbd=Keyboard()
@@ -138,24 +142,24 @@ elif check == 2:
     invtime=0
     enemy_counter=0
     sheet=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
-    bullet=Bullet(sheet)    
-    inter=Interaction(sheet,kbd,hp, secondLevel()[0],secondLevel()[1],bullet)    
+    bullet=Bullet(sheet)
+    inter=Interaction(sheet,kbd,hp, secondLevel()[0],secondLevel()[1],bullet)
     main = Main(secondLevel()[0], sheet, secondLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
 
 def draw(canvas):
     main.runGame(canvas)
-
-def playGame():
-    frame.set_draw_handler(draw)
-    frame.set_keydown_handler(kbd.keyDown)
-    frame.set_keyup_handler(kbd.keyUp)
 
 def start(canvas):
     frame.set_canvas_background('Grey')
     mn = Menu(WIDTH, HEIGHT)
     choice = mn.mainmenu(canvas)
 
+def pause(canvas):
+    mn = Menu(WIDTH, HEIGHT)
+    choice = mn.pausemenu(canvas)
+
 def click(pos):
+    global frame
     # Start Game
     print(pos)
     x = pos[0]
@@ -163,15 +167,20 @@ def click(pos):
 
     if (195 < x < 555) and (197 < y < 240):
         print("Start Game")
-        playGame()
+        frame.set_draw_handler(draw)
+        frame.set_keydown_handler(kbd.keyDown)
+        frame.set_keyup_handler(kbd.keyUp)
     if (195 < x < 555) and (355 < y < 385):
         print("Settings")
         quit()
     if (245 < x < 505) and (415 < y < 440):
         print("Quit")
         quit()
+    if (707 < x < 745) and (5 < y < 45):
+        print("Pause")
+        frame.set_draw_handler(pause)
 
-frame = simplegui.create_frame('Testing', WIDTH, HEIGHT)
+frame = simplegui.create_frame(' The War of The Worlds ', WIDTH, HEIGHT)
 frame.set_draw_handler(start)
 frame.set_mouseclick_handler(click)
 frame.start()
