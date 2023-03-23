@@ -65,15 +65,6 @@ class Main:
             self.obs = []
             mn = Menu(WIDTH, HEIGHT)
             mn.contmenu(canvas)
-            self.enemy_counter=0
-            self.background=secondLevel()[2]
-            self.obs=secondLevel()[0]
-            self.enemyList=secondLevel()[1]
-            self.character=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
-            self.inter=Interaction(self.character,self.kbd,self.hp, secondLevel()[0],secondLevel()[1],self.bullet)
-        if self.character.health==0:
-            print("you are dead")
-            self.menu.mainmenu(canvas)
         for obstacle in self.obs:
             obstacle.draw(canvas)
         self.btime+=1
@@ -122,42 +113,41 @@ def secondLevel():
     enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(random.randint(400,690), 83 - 52), 400, 690),
                 EnemyT1(enemyt1list[random.randint(0,2)], Vector(random.randint(0,204), 204 - 60), 0, 204),
                 EnemyT1(enemyt1list[random.randint(0,2)], Vector(690, 550 - 60), 400, 690),
-                EnemyT1(enemyt1list[random.randint(0,2)], Vector(WIDTH/2, HEIGHT - 115), 0, WIDTH/2]
-                EnemyT1(enemyt1list[random.randint(0,2)], Vector(WIDTH/2, HEIGHT - 115), 0, WIDTH/2 - 70]
+                EnemyT1(enemyt1list[random.randint(0,2)], Vector(WIDTH/2, HEIGHT - 115), 0, WIDTH/2),
+                EnemyT1(enemyt1list[random.randint(0,2)], Vector(WIDTH/2, HEIGHT - 115), 0, WIDTH/2 - 70)]
     obs = [Obstacle(400, 550, 690, 550, 20, "Orange",),
-           Obstacle(133, 425, 250, 425, 20, "Orange",),
-           Obstacle(270, 390, 320, 390, 20, "Orange",),
-           Obstacle(624, 204, 750, 204, 20, "Orange",),
+           Obstacle(133, 425, 340, 425, 20, "Orange",),
+           Obstacle(240, 300, 340, 300, 20, "Orange",),
+           Obstacle(0, 204, 230, 204, 20, "Orange",),
            Obstacle(400, 83, 690, 83, 20, "Orange",)]
     return obs, enemies, background
 
 check = 1
-clock=Clock()
-kbd=Keyboard()
-hp=HealthPack(Vector(100,600))
-gun=False
-btime=0
-invtime=0
-enemy_counter=0
-check = 1
-menu=Menu(WIDTH,HEIGHT)
-def getMain():
-    global check,passed
-    if check == 1:
-        sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel()[0])
-        bullet=Bullet(sheet)
-        inter=Interaction(sheet,kbd,hp, firstLevel()[0],firstLevel()[1],bullet)
-        passed=False
-        return Main(firstLevel()[0], sheet, firstLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1],menu)
+if check == 1:
+    clock=Clock()
+    kbd=Keyboard()
+    hp=HealthPack(Vector(100,600))
+    gun=False
+    btime=0
+    invtime=0
+    enemy_counter=0
+    sheet=Character(Vector(WIDTH/2,HEIGHT-100), firstLevel()[0])
+    bullet=Bullet(sheet)
+    inter=Interaction(sheet,kbd,hp, firstLevel()[0],firstLevel()[1],bullet)
+    main = Main(firstLevel()[0], sheet, firstLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1])
+elif check == 2:
+    clock=Clock()
+    kbd=Keyboard()
+    hp=HealthPack(Vector(100,600))
+    gun=False
+    btime=0
+    invtime=0
+    enemy_counter=0
+    sheet=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
+    bullet=Bullet(sheet)
+    inter=Interaction(sheet,kbd,hp, secondLevel()[0],secondLevel()[1],bullet)
+    main = Main(secondLevel()[0], sheet, secondLevel()[2], clock, kbd, hp, inter, gun, bullet, secondLevel()[1])
 
-    elif check == 2:
-        sheet=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
-        bullet=Bullet(sheet)
-        inter=Interaction(sheet,kbd,hp, secondLevel()[0],secondLevel()[1],bullet)    
-        passed=False
-        return Main(secondLevel()[0], sheet, secondLevel()[2], clock, kbd, hp, inter, gun, bullet, firstLevel()[1],menu)
-     
-main=getMain()
 def draw(canvas):
     main.runGame(canvas)
 
