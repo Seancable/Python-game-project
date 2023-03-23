@@ -49,7 +49,6 @@ class Interaction:
         self.obstacle = obstacle
         self.enemy=enemy
         self.bullet=bullet
-        self.inv = True
     def update(self):
         if self.keyboard.right:
             self.keyRight()
@@ -64,13 +63,12 @@ class Interaction:
         if not (self.keyboard.right or self.keyboard.left or self.keyboard.up):
             self.sheet.rows=(self.sheet.height/self.sheet.row)/2
             self.sheet.width=IMAGE.get_width()
-        if self.sheet.pos.get_p()[0]<=self.hp.pos.get_p()[0]+50 or self.sheet.pos.get_p()[0]<=self.hp.pos.get_p()[0]-50:
+        if (self.sheet.pos.get_p()[0]<=self.hp.pos.get_p()[0]+30 or self.sheet.pos.get_p()[0]<=self.hp.pos.get_p()[0]-30) and (self.hp.pos.get_p()[1]-30<=self.sheet.pos.get_p()[1]<=self.hp.pos.get_p()[1]+30) :
             if self.hp.used==False and self.sheet.health!=10:
                 self.sheet.health+=2.5
                 self.hp.used=True
         #print(self.sheet.pos.get_p(), self.obstacle.getStart())
-        else:
-            self.inv=False
+
             
 
         
