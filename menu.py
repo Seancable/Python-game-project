@@ -1,4 +1,5 @@
 import random
+from menuCont import MenuCont
 
 try:
     import simplegui
@@ -39,33 +40,31 @@ class Menu:
         return menChoice
 
     def pausemenu(self, canvas):
-        canvas.draw_polygon([[self.width/2 - 200, self.height/2 - 150], [self.width/2 + 200, self.height/2 - 150],
-        [self.width/2 + 200, self.height/2 +  150], [self.width/2 - 200, self.height/2 + 150]], 12, 'Black', 'ForestGreen')
-        #canvas.draw_polygon([[],[],[],[], 5, 'Silver', 'Silver']) # Continue Button
-        #canvas.draw_polygon([[],[],[],[], 5, 'Silver', 'Silver']) # Load Game Button ** If time allows**
-        #canvas.draw_polygon([[],[],[],[], 5, 'Silver', 'Silver']) # Settings Button
-        #canvas.draw_polygon([[],[],[],[], 5, 'Silver', 'Silver']) # Exit Button
+        canvas.draw_polygon([[self.width/2 - 300, self.height/2 - 250], [self.width/2 + 300, self.height/2 - 250],
+        [self.width/2 + 300, self.height/2 +  250], [self.width/2 - 300, self.height/2 + 250]], 12, 'Black', 'ForestGreen')
+        # New Game button
+        canvas.draw_polygon([[self.width/4, self.height/4], [3/4*(self.width), self.height/4],
+                             [3/4*(self.width), self.height/4 + 60], [self.width/4, self.height/4 + 60]], 12, 'Grey', 'Silver')
+        canvas.draw_text('Resume', [self.width/4 + 80, self.height/4 + 45], 45, 'Red')
 
-def start(canvas):
-    frame.set_canvas_background('Grey')
-    mn = Menu(WIDTH, HEIGHT)
-    choice = mn.mainmenu(canvas)
+        # Settings Button
+        canvas.draw_polygon([[self.width/4, self.height/4 + 160], [3/4*(self.width), self.height/4 + 160],
+                             [3/4*(self.width), self.height/4 + 200], [self.width/4, self.height/4 + 200]], 12, 'Grey', 'Silver')
+        canvas.draw_text('Controls', [self.width/4 + 140, self.height/4 + 190], 30, 'Red')
 
-def cont(canvas):
-    pass
+        # Quit Button
+        canvas.draw_polygon([[self.width/4 + 50, self.height/4 + 260], [3/4*(self.width) - 50, self.height/4 + 260],
+                             [3/4*(self.width) - 50, self.height/4 + 220], [self.width/4 + 50, self.height/4 + 220]], 12, 'Grey', 'Silver')
+        canvas.draw_text('Quit', [self.width/4 + 166, self.height/4 + 250], 25, 'Red')
 
-
-
-
-
-startType = 0
-
-'''
-frame = simplegui.create_frame(" The War of The Worlds ", WIDTH, HEIGHT)
-
-if startType == 0:
-    #playsound('Introduction.wav')
-    frame.set_draw_handler(start)
-else:
-    frame.set_draw_handler(cont)
-'''
+    def contmenu(self, canvas):
+        canvas.draw_polygon([[self.width/2 - 300, self.height/2 - 250], [self.width/2 + 300, self.height/2 - 250],
+        [self.width/2 + 300, self.height/2 +  250], [self.width/2 - 300, self.height/2 + 250]], 12, 'Black', 'ForestGreen')
+        # Continue button
+        canvas.draw_polygon([[self.width/4, self.height/4 + 50], [3/4*(self.width), self.height/4 + 50],
+                             [3/4*(self.width), self.height/4 + 110], [self.width/4, self.height/4 + 110]], 12, 'Grey', 'Silver')
+        canvas.draw_text('Continue', [self.width/4 + 80, self.height/4 + 95], 45, 'Red')
+        # Quit Button
+        canvas.draw_polygon([[self.width/4 + 50, self.height/4 + 260], [3/4*(self.width) - 50, self.height/4 + 260],
+                             [3/4*(self.width) - 50, self.height/4 + 220], [self.width/4 + 50, self.height/4 + 220]], 12, 'Grey', 'Silver')
+        canvas.draw_text('Quit', [self.width/4 + 166, self.height/4 + 250], 25, 'Red')
