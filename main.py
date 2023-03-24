@@ -67,11 +67,20 @@ class Main:
             mn.contmenu(canvas)
             print("all enemies are dead")
             self.enemy_counter=0
-            self.background=secondLevel()[2]
-            self.obs=secondLevel()[0]
-            self.enemyList=secondLevel()[1]
-            self.character=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
-            self.inter=Interaction(self.character,self.kbd,self.hp, secondLevel()[0],secondLevel()[1],self.bullet)
+            if check==1:
+                self.background=secondLevel()[2]
+                self.obs=secondLevel()[0]
+                self.enemyList=secondLevel()[1]
+                self.character=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
+                self.inter=Interaction(self.character,self.kbd,self.hp, secondLevel()[0],secondLevel()[1],self.bullet)
+                check+=1
+            else:
+                self.background=thirdLevel()[2]
+                self.obs=thirdLevel()[0]
+                self.enemyList=thirdLevel()[1]
+                self.character=Character(Vector(WIDTH/2,HEIGHT-100), thirdLevel()[0])
+                self.inter=Interaction(self.character,self.kbd,self.hp, thirdLevel()[0],thirdLevel()[1],self.bullet)
+     
         if self.character.health==0:
             print("you are dead")
             self.menu.mainmenu(canvas)
@@ -131,6 +140,18 @@ def secondLevel():
            Obstacle(0, 204, 230, 204, 20, "Orange", False),
            Obstacle(400, 83, 690, 83, 20, "Orange", False)]
     return obs, enemies, background
+def thirdLevel():
+    background = Background(bck,WIDTH,HEIGHT)
+    enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
+    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 95), 400, 525),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 100 - 60), 400, 750),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
+    obs = [Obstacle(400, 550, 690, 550, 20, "Orange",),
+           Obstacle(133, 425, 250, 425, 20, "Orange",),
+           Obstacle(270, 390, 320, 390, 20, "Orange",),
+           Obstacle(624, 204, 750, 204, 20, "Orange",),
+           Obstacle(400, 83, 690, 83, 20, "Orange",)]
+    return obs, enemies, background   
 
 check = 1
 if check == 1:
