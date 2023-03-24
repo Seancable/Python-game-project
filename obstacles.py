@@ -18,6 +18,10 @@ class Obstacle:
         #canvas.draw_image(WALL_IMG, self.center, self.widthHeight, self.centerDest, self.start)
         canvas.draw_line(self.start, (self.endX, self.endY), self.thickness, self.colour)
         
+        canvas.draw_polygon([[700, 50], [750, 50],
+                             [750, 0], [700, 0]], 12, 'Grey', 'Silver')
+        canvas.draw_text('||', [720, 40], 40, 'SlateGray')
+        
     def getStartX(self):
         return self.x
 
