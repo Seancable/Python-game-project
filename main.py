@@ -65,6 +65,16 @@ class Main:
             self.obs = []
             mn = Menu(WIDTH, HEIGHT)
             mn.contmenu(canvas)
+            print("all enemies are dead")
+            self.enemy_counter=0
+            self.background=secondLevel()[2]
+            self.obs=secondLevel()[0]
+            self.enemyList=secondLevel()[1]
+            self.character=Character(Vector(WIDTH/2,HEIGHT-100), secondLevel()[0])
+            self.inter=Interaction(self.character,self.kbd,self.hp, secondLevel()[0],secondLevel()[1],self.bullet)
+        if self.character.health==0:
+            print("you are dead")
+            self.menu.mainmenu(canvas)
         for obstacle in self.obs:
             obstacle.draw(canvas)
         self.btime+=1
