@@ -68,3 +68,6 @@ class Menu:
         canvas.draw_polygon([[self.width/4 + 50, self.height/4 + 260], [3/4*(self.width) - 50, self.height/4 + 260],
                              [3/4*(self.width) - 50, self.height/4 + 220], [self.width/4 + 50, self.height/4 + 220]], 12, 'Grey', 'Silver')
         canvas.draw_text('Quit', [self.width/4 + 166, self.height/4 + 250], 25, 'Red')
+        
+     def controlsMenu(self, canvas):
+        pass
