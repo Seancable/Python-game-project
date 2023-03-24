@@ -116,8 +116,8 @@ class Main:
 def firstLevel():
     background = Background(bck, WIDTH, HEIGHT)
     enemyt1list = [enemy1_a, enemy1_b, enemy1_c]
-    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 60), 300, 600),
-               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 200 - 95), 400, 750),
+    enemies = [EnemyT1(enemyt1list[random.randint(0,2)], Vector(600, 500 - 95), 400, 525),
+               EnemyT1(enemyt1list[random.randint(0,2)], Vector(280, 100 - 60), 400, 750),
                EnemyT1(enemyt1list[random.randint(0,2)], Vector(400, 600 - 60), 200, 400)]
     obs = [Obstacle(200, 600, 400, 600, 20, "Orange",),
         Obstacle(400, 450, 550, 450, 20, "Orange"),
