@@ -115,11 +115,11 @@ def secondLevel():
                 EnemyT1(enemyt1list[random.randint(0,2)], Vector(690, 550 - 60), 400, 690),
                 EnemyT1(enemyt1list[random.randint(0,2)], Vector(WIDTH/2, HEIGHT - 115), 0, WIDTH/2),
                 EnemyT1(enemyt1list[random.randint(0,2)], Vector(WIDTH/2, HEIGHT - 115), 0, WIDTH/2 - 70)]
-    obs = [Obstacle(400, 550, 690, 550, 20, "Orange",),
-           Obstacle(133, 425, 340, 425, 20, "Orange",),
-           Obstacle(240, 300, 340, 300, 20, "Orange",),
-           Obstacle(0, 204, 230, 204, 20, "Orange",),
-           Obstacle(400, 83, 690, 83, 20, "Orange",)]
+    obs = [Obstacle(400, 550, 690, 550, 20, "Orange", False),
+           Obstacle(133, 425, 340, 425, 20, "Orange", False),
+           Obstacle(240, 300, 340, 300, 20, "Orange", False),
+           Obstacle(0, 204, 230, 204, 20, "Orange", False),
+           Obstacle(400, 83, 690, 83, 20, "Orange", False)]
     return obs, enemies, background
 
 check = 1
