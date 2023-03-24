@@ -160,29 +160,54 @@ def pause(canvas):
     mn = Menu(WIDTH, HEIGHT)
     choice = mn.pausemenu(canvas)
 
+# Indicates that the user is viewing the controls
+def controls():
+    mn = Menu(WIDTH, HEIGHT)
+    mn.controlsMenu(canvas)
+
+# Method to recognise a mouse click by the user
 def click(pos):
     global frame
-    # Start Game
-    print(pos)
+    #print(pos)
     x = pos[0]
     y = pos[1]
 
     if (195 < x < 555) and (197 < y < 240):
-        print("Start Game")
+        # If the mouse is clicked within these parameters,
+        # the game begins by setting a draw_handler and
+        # initialising the keyboard
         frame.set_draw_handler(draw)
         frame.set_keydown_handler(kbd.keyDown)
         frame.set_keyup_handler(kbd.keyUp)
     if (195 < x < 555) and (355 < y < 385):
-        print("Settings")
-        quit()
+        # If the mouse is clicked within these parameters,
+        # a 'controls' menu will appear
+
+        frame.set_draw_handler(controls)
     if (245 < x < 505) and (415 < y < 440):
-        print("Quit")
+        # If the mouse is clicked within these parameters,
+        # the player will exit the game
+
         quit()
     if (707 < x < 745) and (5 < y < 45):
-        print("Pause")
-        frame.set_draw_handler(pause)
+        # If the mouse is clicked within these parameters,
+        # the game is paused and the game state saved
+        # (i.e. enemies and player will remain in the
+        # same positions)
 
+        frame.set_draw_handler(pause)
+    if (195 < x < 555) and (245 < y < 290):
+        # If the mouse is clicked within these parameters,
+        # the level check increments by 1 and the next
+        # level is displayed
+        frame.set_draw_handler(draw)
+        
+        
+# Creating the frame for the game - Used as a default over all of the classes involved
 frame = simplegui.create_frame(' The War of The Worlds ', WIDTH, HEIGHT)
+# Begins the game by initialising the start() method (calling the Menu class)
 frame.set_draw_handler(start)
+# Initialises the handler for when the player clicks the mouse
 frame.set_mouseclick_handler(click)
+# Begin the frame animation
 frame.start()
